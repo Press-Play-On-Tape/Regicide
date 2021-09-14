@@ -9,8 +9,8 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight) {
 
     PD::drawBitmap(x, y, highlight ? Images::Card_Front_Highlight : Images::Card_Front_Normal);
 
-    PD::setCursor(x + 6, y + 4);
-    PD::setColor(7);
+    PD::setCursor(x + 5, y + 4);
+    PD::setColor(0, 14);
 
     switch (card.getNumber() % 13) {
 
@@ -23,7 +23,10 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight) {
             break;
 
         case 9:    
-            PD::print("10");
+            PD::setCursor(x + 2, y + 4);
+            PD::print("1");
+            PD::setCursor(x + 7, y + 4);
+            PD::print("0");
             break;
 
         case 10:    
@@ -142,7 +145,7 @@ void Game::renderAttackButton(ButtonState state) {
 
             PD::drawBitmap(147, 150, Images::Button_Grey);
             PD::setCursor(168, 152);
-            PD::setColor(5);
+            PD::setColor(5, 14);
             PD::print("Attack");
             break;
 
@@ -150,7 +153,7 @@ void Game::renderAttackButton(ButtonState state) {
 
             PD::drawBitmap(147, 150, Images::Button);
             PD::setCursor(168, 152);
-            PD::setColor(7);
+            PD::setColor(0, 14);
             PD::print("Attack");
             break;
 
@@ -158,7 +161,7 @@ void Game::renderAttackButton(ButtonState state) {
 
             PD::drawBitmap(147, 150, Images::Button_Highlight);
             PD::setCursor(168, 152);
-            PD::setColor(7);
+            PD::setColor(0, 14);
             PD::print("Attack");
             break;
 
@@ -174,7 +177,7 @@ void Game::renderYieldButton(ButtonState state) {
 
             PD::drawBitmap(147, 164, Images::Button_Grey);
             PD::setCursor(168, 166);
-            PD::setColor(5);
+            PD::setColor(5, 14);
             PD::print("Yield");
             break;
 
@@ -182,7 +185,7 @@ void Game::renderYieldButton(ButtonState state) {
 
             PD::drawBitmap(147, 164, Images::Button);
             PD::setCursor(168, 166);
-            PD::setColor(7);
+            PD::setColor(0, 14);
             PD::print("Yield");
             break;
 
@@ -190,7 +193,7 @@ void Game::renderYieldButton(ButtonState state) {
 
             PD::drawBitmap(147, 164, Images::Button_Highlight);
             PD::setCursor(168, 166);
-            PD::setColor(7);
+            PD::setColor(0, 14);
             PD::print("Yield");
             break;
 

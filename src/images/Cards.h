@@ -11,6 +11,11 @@ namespace Images {
     #include "cards/Diamond_Grey.h"
     #include "cards/Club_Grey.h"
     #include "cards/Spade_Grey.h"
+
+    #include "cards/Heart_White.h"
+    #include "cards/Diamond_White.h"
+    #include "cards/Club_White.h"
+    #include "cards/Spade_White.h"
     
     #include "cards/Card_Front_Normal.h"
     #include "cards/Card_Front_Highlight.h"
@@ -29,6 +34,13 @@ namespace Images {
         Club_Grey,
         Diamond_Grey,
         Heart_Grey,
+    };
+
+    const uint8_t * const Suits_White[] = { 
+        Spade_White,
+        Club_White,
+        Diamond_White,
+        Heart_White,
     };
     
 }

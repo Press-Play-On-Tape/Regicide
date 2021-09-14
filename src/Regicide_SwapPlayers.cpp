@@ -32,7 +32,9 @@ void Game::gameSwapPlayers() {
 
     // Render page ..
 
-    PD::setCursor(0, 0);
+    PD::fillScreen(3);
+    
+    PD::setCursor(7, 14);
     PD::setColor(6);
     PD::print("Swap Players");
 

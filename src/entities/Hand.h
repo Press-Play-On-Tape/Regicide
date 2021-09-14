@@ -8,8 +8,8 @@ struct Hand {
 
     private:
 
-        Card cards[8];
-        bool mark[8];
+        Card cards[10];
+        bool mark[10];
         uint8_t playerNumber;
         int8_t cardIndex;
         uint8_t maxNumberOfCards;
@@ -260,8 +260,7 @@ struct Hand {
                     return (cardsSelected[countIdx] * (countIdx + 1) <= 10);
 
                 case 2:
-                    // CHECK: can multiple animal companions and one other card?
-                    return (cardsSelected[0] > 0 && cardsSelected[countIdx] == 1 && countIdx < 13 && (2 + countIdx <= 10));
+                    return (cardsSelected[0] > 0 && cardsSelected[countIdx] == 1 && countIdx < 13);
 
                 default:
                     return false;

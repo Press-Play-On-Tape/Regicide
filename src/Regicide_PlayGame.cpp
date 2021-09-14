@@ -334,7 +334,7 @@ void Game::game() {
                 case  0:
                     if (PC::buttons.pressed(BTN_LEFT)) {
 
-                        if (cardCursor > 0 && cardCursor < currentHand.getCardIndex()) {
+                        if (cardCursor > 0 && cardCursor <= currentHand.getCardIndex()) {
 
                             cardCursor--;
 
@@ -433,11 +433,11 @@ void Game::game() {
 
 
 
-
+    PD::fillScreen(3);
 
     // Upper decks ..
 
-    PD::setColor(7);
+    PD::setColor(7, 14);
     PD::setCursor(5, 0);
     PD::print("Castle:");
     PD::print(static_cast<uint16_t>(this->deck.getIndex(DeckTypes::Castle) + 1));
@@ -445,6 +445,7 @@ void Game::game() {
 
     //Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
     uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
+    PD::setColor(7, 14);
     PD::setCursor(5, 85);
     PD::print("Attack:");
     PD::print(static_cast<uint16_t>(attack));
@@ -452,11 +453,13 @@ void Game::game() {
     PD::print("Health:");
     PD::print(static_cast<uint16_t>(currentEnemy.getHealth()));
 
+    PD::setColor(7, 14);
     PD::setCursor(85, 0);
     PD::print("Tavern:");
     PD::print(static_cast<uint16_t>(this->deck.getIndex(DeckTypes::Tavern) + 1));
     this->renderTavernDeck(85, 12);
 
+    PD::setColor(7, 14);
     PD::setCursor(155, 0);
     PD::print("Discard:");
     PD::print(static_cast<uint16_t>(this->deck.getIndex(DeckTypes::Discard) + 1));
@@ -466,45 +469,45 @@ void Game::game() {
     // Player hand ..
 
     PD::setCursor(0, 110);
-    PD::setColor(3);
+    PD::setColor(1, 3);
     PD::print("Player ");
     PD::print(static_cast<uint16_t>(this->gamePlay.getCurrentPlayer() + 1));
 
     this->renderPlayerHand(currentPlayer, 0, 144, cardCursor);
     uint8_t health = currentHand.getHealth();
     PD::setCursor(150, 90);
-    PD::setColor(7);
+    PD::setColor(7, 3);
     PD::print("Health ");
     PD::print(static_cast<uint16_t>(health));
 
     attack = currentHand.getAttackValue(false);
     PD::setCursor(150, 100);
-    PD::setColor(attack > 0 ? 7 : 5);
+    PD::setColor(attack > 0 ? 7 : 5, 3);
     PD::print("Attack ");
     PD::print(static_cast<uint16_t>(attack));
 
     uint8_t selected = currentHand.getMarkedSuit(CardSuit::Hearts);
-    PD::drawBitmap(150, 110, selected ? Images::Suits[static_cast<uint8_t>(CardSuit::Hearts)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Hearts)]);
+    PD::drawBitmap(150, 110, selected ? Images::Suits_White[static_cast<uint8_t>(CardSuit::Hearts)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Hearts)]);
     PD::setCursor(160, 110);
-    PD::setColor(selected ? 7 : 5);
+    PD::setColor(selected ? 7 : 5, 3);
     PD::print("Health");
 
     selected = currentHand.getMarkedSuit(CardSuit::Diamonds);
-    PD::drawBitmap(150, 120, selected ? Images::Suits[static_cast<uint8_t>(CardSuit::Diamonds)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Diamonds)]);
+    PD::drawBitmap(150, 120, selected ? Images::Suits_White[static_cast<uint8_t>(CardSuit::Diamonds)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Diamonds)]);
     PD::setCursor(160, 120);
-    PD::setColor(selected ? 7 : 5);
+    PD::setColor(selected ? 7 : 5, 3);
     PD::print("Draw Cards");
 
     selected = currentHand.getMarkedSuit(CardSuit::Clubs);
-    PD::drawBitmap(150, 130, selected ? Images::Suits[static_cast<uint8_t>(CardSuit::Clubs)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Clubs)]);
+    PD::drawBitmap(150, 130, selected ? Images::Suits_White[static_cast<uint8_t>(CardSuit::Clubs)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Clubs)]);
     PD::setCursor(160, 130);
-    PD::setColor(selected ? 7 : 5);
+    PD::setColor(selected ? 7 : 5, 3);
     PD::print("Double Dmg");
 
     selected = currentHand.getMarkedSuit(CardSuit::Spades);
-    PD::drawBitmap(150, 140, selected ? Images::Suits[static_cast<uint8_t>(CardSuit::Spades)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Spades)]);
+    PD::drawBitmap(150, 140, selected ? Images::Suits_White[static_cast<uint8_t>(CardSuit::Spades)] : Images::Suits_Grey[static_cast<uint8_t>(CardSuit::Spades)]);
     PD::setCursor(160, 140);
-    PD::setColor(selected ? 7 : 5);
+    PD::setColor(selected ? 7 : 5, 3);
     PD::print("Shield");
 
 
@@ -512,7 +515,7 @@ void Game::game() {
 
         case GameState::Game_Step1_Play:
             {
-                PD::setColor(2);
+                PD::setColor(2, 3);
                 PD::setCursor(0, 120);
                 if (currentHand.getCardsAdded() > 0 ) {
                     PD::print(static_cast<uint16_t>(currentHand.getCardsAdded()));
@@ -542,7 +545,7 @@ void Game::game() {
                 uint8_t attack = currentHand.getAttackValue();
                 Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
 
-                PD::setColor(2);
+                PD::setColor(2, 3);
                 PD::setCursor(0, 120);
 
                 if (attack == currentEnemy.getHealth()) {
@@ -564,7 +567,7 @@ void Game::game() {
 
         case GameState::Game_Step4_SufferDamage:
             {        
-                PD::setColor(2);
+                PD::setColor(2, 3);
                 PD::setCursor(0, 120);
 
                 //Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
