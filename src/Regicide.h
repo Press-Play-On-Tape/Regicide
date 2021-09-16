@@ -46,21 +46,25 @@ class Game {
         void title();
         void gameOver_Init();
         void gameOver();
+        void winner_Init();
+        void winner();
         void gameSwapPlayers_Init();
         void gameSwapPlayers();
+        bool changeAttackers(Card& currentEnemy);
 
         void playTheme();
         void muteTheme();
         void playSoundEffect(SoundEffect soundEffect);
         
         void renderCard(int16_t x, int16_t y, Card &card, bool highlight);
-        void renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selecteIndex);
-        void renderCastleDeck(int16_t x, int16_t y);
-        void renderTavernDeck(int16_t x, int16_t y);
-        void renderDiscardDeck(int16_t x, int16_t y);
+        void renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selecteIndex, uint8_t cardsToSuppress);
+        void renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards);
+        void renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards);
+        void renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards);
         void renderAttackButton(ButtonState state);
         void renderYieldButton(ButtonState state);
-
+        void renderLegend(Hand &currentHand);
+        void renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards);
 
 };
 

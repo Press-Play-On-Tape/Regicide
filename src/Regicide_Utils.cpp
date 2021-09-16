@@ -105,3 +105,26 @@ void Game::playSoundEffect(SoundEffect soundEffect) {
     #endif
 
 }    
+
+bool Game::changeAttackers(Card& currentEnemy) {
+
+    if (this->deck.getIndex(DeckTypes::Castle) >= 0) {
+
+        this->deck.dealCard(DeckTypes::Castle, currentEnemy);
+
+        for (uint8_t i = 0; i < 4; i++) {
+
+            this->hands[i].setEnemyCardSuit(this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle)).getSuit());
+            
+        }
+
+        return false;
+
+    }
+    else {
+
+        return false;
+
+    }
+
+}

@@ -26,7 +26,7 @@ void Game::gameOver() {
 
     if (PC::buttons.pressed(BTN_A)) { 
 
-        this->gameState = GameState::Game_Init;
+        this->gameState = GameState::Splash_Init;
 
     }         
 
@@ -34,7 +34,7 @@ void Game::gameOver() {
     // Render page ..
 
     PD::fillScreen(3);
-    
+
     PD::setCursor(7, 14);
     PD::setColor(6);
     PD::print("You Died. Game Over!");

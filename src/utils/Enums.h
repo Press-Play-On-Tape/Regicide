@@ -20,6 +20,7 @@ namespace Constants {
     constexpr uint8_t MaxNumberOfCards[] = { 0, 8, 7, 6, 5 };
     constexpr uint8_t CardCursor_Attack = 100;
     constexpr uint8_t CardCursor_Yield = 101;
+    constexpr uint8_t DealDelay = 15;
 
 }
 
@@ -38,6 +39,7 @@ enum class GameState : uint8_t {
     Title,
     Game_Init,
     Game_NewHand,
+    Game_Step0_AddCards,
     Game_Step1_Play,
     Game_Step2_Activate,
     Game_Step3_DealDamage,
@@ -45,7 +47,9 @@ enum class GameState : uint8_t {
     Game_SwapPlayers_Init,
     Game_SwapPlayers,
     GameOver_Init,
-    GameOver
+    GameOver,
+    Winner_Init,
+    Winner,
 };
 
 enum class SoundEffect : uint8_t {

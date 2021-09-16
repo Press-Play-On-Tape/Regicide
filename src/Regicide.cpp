@@ -38,6 +38,7 @@ void Game::loop() {
             break;
 
         case GameState::Game_NewHand:
+        case GameState::Game_Step0_AddCards:
         case GameState::Game_Step1_Play:
         case GameState::Game_Step2_Activate:
         case GameState::Game_Step3_DealDamage:
@@ -61,6 +62,15 @@ void Game::loop() {
 
         case GameState::GameOver:
             this->gameOver();
+            break;
+
+        case GameState::Winner_Init:
+            this->winner_Init();
+            this->winner();
+            break;
+
+        case GameState::Winner:
+            this->winner();
             break;
 
     }

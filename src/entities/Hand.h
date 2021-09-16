@@ -8,8 +8,11 @@ struct Hand {
 
     private:
 
-        Card cards[10];
-        bool mark[10];
+        #define HAND_SIZE 12
+
+        Card cards[HAND_SIZE];
+        bool mark[HAND_SIZE];
+
         uint8_t playerNumber;
         int8_t cardIndex;
         uint8_t maxNumberOfCards;
@@ -42,7 +45,7 @@ struct Hand {
             this->maxNumberOfCards = maxNumberOfCards;
             this->playerNumber = playerNumber;
 
-            for (uint8_t i = 0; i < 8; i++) {
+            for (uint8_t i = 0; i < HAND_SIZE; i++) {
 
                 this->cards[i].init(Cards::NoCard);
 
@@ -107,7 +110,7 @@ struct Hand {
 
         void clearMarks() {
 
-            for (uint8_t i = 0; i < 8; i++) {
+            for (uint8_t i = 0; i < HAND_SIZE; i++) {
 
                 this->mark[i] = false;
 
@@ -125,6 +128,24 @@ struct Hand {
         bool getMarkedSuit(CardSuit suit) {
 
             return this->suits[static_cast<uint8_t>(suit)];
+
+        }
+
+        uint8_t getMarkedCardCount() {
+
+            uint8_t count = 0;
+                
+            for (uint8_t i = 0; i < HAND_SIZE; i++) {
+
+                if (this->mark[i]) {
+
+                    count++;
+
+                }
+
+            }
+
+            return count;
 
         }
 
@@ -206,6 +227,7 @@ struct Hand {
             uint8_t cardsSelected[14];
             bool valid = false;
 
+
             // Clear out values ..
 
             for (uint8_t i = 0; i < 14; i++) {
@@ -277,6 +299,7 @@ struct Hand {
             for (uint8_t i = index; i <= this->cardIndex; i++) {
 
                 this->cards[i].init(this->cards[i + 1].getCardIndex());
+                this->mark[i] = this->mark[i+ 1];
 
             }
 
@@ -302,6 +325,12 @@ struct Hand {
         void incCardsAdded() {
 
             this->cardsAdded++;
+            
+        }
+
+        void decCardsAdded() {
+
+            this->cardsAdded--;
             
         }
 
