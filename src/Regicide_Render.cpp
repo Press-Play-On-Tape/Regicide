@@ -5,7 +5,7 @@ using PC = Pokitto::Core;
 using PD = Pokitto::Display;
 
 
-void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight) { 
+void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool logo) { 
 
     PD::drawBitmap(x, y, highlight ? Images::Card_Front_Highlight : Images::Card_Front_Normal);
 
@@ -16,12 +16,17 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight) {
         case 0:    
             PD::setCursor(x + 5, y + 4);
             PD::print("A");
+            PD::drawBitmap(x + 28, y + 60, Images::LargeNumbers_Inverted[0]);
+            PD::drawBitmap(x + 28, y + 48, Images::Suits_Coloured_Rot[static_cast<uint8_t>(card.getSuit())]);
+            if (logo) PD::drawBitmap(x + 8, y + 23, Images::Logo);
             break;
 
         case 1 ... 8:    
             PD::setCursor(x + 5, y + 4);
             PD::print(static_cast<uint16_t>((card.getNumber() % 13) + 1));
-            PD::drawBitmap(x + 26, y + 64, Images::LargeNumbers_Inverted[(card.getNumber() % 13) + 1]);
+            PD::drawBitmap(x + 28, y + 60, Images::LargeNumbers_Inverted[(card.getNumber() % 13) + 1]);
+            PD::drawBitmap(x + 28, y + 48, Images::Suits_Coloured_Rot[static_cast<uint8_t>(card.getSuit())]);
+            if (logo) PD::drawBitmap(x + 8, y + 23, Images::Logo);
             break;
 
         case 9:    
@@ -29,7 +34,9 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight) {
             PD::print("1");
             PD::setCursor(x + 7, y + 4);
             PD::print("0");
-            PD::drawBitmap(x + 26, y + 64, Images::LargeNumbers_Inverted[10]);
+            PD::drawBitmap(x + 28, y + 60, Images::LargeNumbers_Inverted[10]);
+            PD::drawBitmap(x + 28, y + 48, Images::Suits_Coloured_Rot[static_cast<uint8_t>(card.getSuit())]);
+            if (logo) PD::drawBitmap(x + 8, y + 23, Images::Logo);
             break;
 
         case 10:    
@@ -52,7 +59,6 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight) {
     }
 
     PD::drawBitmap(x + 3, y + 14, Images::Suits_Coloured[static_cast<uint8_t>(card.getSuit())]);
-    PD::drawBitmap(x + 26, y + 54, Images::Suits_Coloured[static_cast<uint8_t>(card.getSuit())], ROT180, FLIPV);
 
 
 }
@@ -65,7 +71,7 @@ void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t sel
         Card card = this->hands[playerIdx].getCard(i);
         bool marked = this->hands[playerIdx].isMarked(i);
 
-        this->renderCard(x, y - (marked ? 10 : 0), card, i == selecteIndex);
+        this->renderCard(x, y - (marked ? 10 : 0), card, i == selecteIndex, false);
         x = x + 17;
 
     }
@@ -90,7 +96,7 @@ void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards) {
         for (uint8_t i = startCard; i <= endCard; i++) {
 
             Card card = this->deck.getCard(DeckTypes::Castle, i);
-            this->renderCard(x, y, card, false);
+            this->renderCard(x, y, card, false, false);
             x = x + 2;
 
         }
@@ -144,7 +150,7 @@ void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards) {
         for (uint8_t i = startCard; i < endCard; i++) {
 
             Card card = this->deck.getCard(DeckTypes::Discard, i);
-            this->renderCard(x, y, card, false);
+            this->renderCard(x, y, card, false, true);
             x = x + 2;
 
         }

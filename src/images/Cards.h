@@ -7,6 +7,11 @@ namespace Images {
     #include "cards/Clubs_Coloured.h"
     #include "cards/Spades_Coloured.h"
 
+    #include "cards/Hearts_Coloured_Rot.h"
+    #include "cards/Diamonds_Coloured_Rot.h"
+    #include "cards/Clubs_Coloured_Rot.h"
+    #include "cards/Spades_Coloured_Rot.h"
+
     #include "cards/Hearts_Disabled.h"
     #include "cards/Diamonds_Disabled.h"
     #include "cards/Clubs_Disabled.h"
@@ -21,12 +26,21 @@ namespace Images {
     #include "cards/Jack_Spades.h"
     #include "cards/Jack_Diamonds.h"
     #include "cards/Jack_Hearts.h"
-    
+
+    #include "cards/Logo.h"
+
     const uint8_t * const Suits_Coloured[] = { 
         Spades_Coloured,
         Clubs_Coloured,
         Diamonds_Coloured,
         Hearts_Coloured,
+    };
+
+    const uint8_t * const Suits_Coloured_Rot[] = { 
+        Spades_Coloured_Rot,
+        Clubs_Coloured_Rot,
+        Diamonds_Coloured_Rot,
+        Hearts_Coloured_Rot,
     };
 
     const uint8_t * const Suits_Disabled[] = { 
