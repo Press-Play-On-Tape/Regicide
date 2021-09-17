@@ -43,6 +43,7 @@ void Game::loop() {
         case GameState::Game_Step2_Activate:
         case GameState::Game_Step3_DealDamage:
         case GameState::Game_Step4_SufferDamage:
+        case GameState::Game_Step5_EnemyDead:
             this->game();
             break;
 

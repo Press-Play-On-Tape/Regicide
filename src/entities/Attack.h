@@ -28,6 +28,7 @@ struct Attack {
         void update() {
 
             if (this->index > 0) this->index--;
+            
         }
 
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG
+#define _DEBUG
 #define _SOUNDS
 #define COOKIE_INITIALISED 42
 
@@ -25,6 +25,10 @@ namespace Constants {
     constexpr uint8_t CardWidth_Half = 20;
     constexpr uint8_t NoSelection = 255;
 
+    constexpr uint8_t AttackMax = 4;
+    constexpr uint8_t AttackLength = 7 * 3;
+    constexpr uint8_t AttackInterval = 15;
+
 }
 
 enum class GameMode : uint8_t {
@@ -47,6 +51,7 @@ enum class GameState : uint8_t {
     Game_Step2_Activate,
     Game_Step3_DealDamage,
     Game_Step4_SufferDamage,
+    Game_Step5_EnemyDead,
     Game_SwapPlayers_Init,
     Game_SwapPlayers,
     GameOver_Init,
@@ -86,4 +91,19 @@ enum class ButtonState : uint8_t {
     Enabled,
     Disabled,
     Highlighted
+};
+
+enum class Caption : uint8_t {
+    AttackingTheEnemy,
+    AttackOrYield,
+    DiscardPoints,
+    EnemyAttacked,
+    EnemyDefeated,
+    CardAddedToDiscard,
+    CardAddedToYourHand,
+    CardAddedToTavern,
+    YouDied,
+    YouSurvived,
+    YouSurvivedThisRound,
+    None
 };

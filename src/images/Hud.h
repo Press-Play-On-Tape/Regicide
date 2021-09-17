@@ -14,6 +14,7 @@ namespace Images {
     #include "hud/Banner_Castle.h"
     #include "hud/Banner_Discard.h"
     #include "hud/Banner_Tavern.h"
+    #include "hud/Player.h"
     
     #include "hud/smallDigits/Number_Small_00.h"
     #include "hud/smallDigits/Number_Small_01.h"
@@ -57,6 +58,18 @@ namespace Images {
     #include "hud/Legend_Heal_Highlight.h"
     #include "hud/Legend_Shield_Grey.h"
     #include "hud/Legend_Shield_Highlight.h"
+
+    #include "captions/AttackingTheEnemy.h"
+    #include "captions/AttackOrYield.h"
+    #include "captions/DiscardPoints.h"
+    #include "captions/EnemyAttacked.h"
+    #include "captions/EnemyDefeated.h"
+    #include "captions/CardAddedToDiscard.h"
+    #include "captions/CardAddedToHand.h"
+    #include "captions/CardAddedToTavern.h"
+    #include "captions/YouDied.h"
+    #include "captions/YouSurvived.h"
+    #include "captions/YouSurvivedThisRound.h"
 
     const uint8_t * const SmallNumbers[] = { 
         Number_Small_00,
@@ -108,6 +121,20 @@ namespace Images {
         Button_Yield,
         Button_Yield_Grey,
         Button_Yield_Highlight
+    };
+
+    const uint8_t * const Captions[] = { 
+        AttackingTheEnemy,
+        AttackOrYield,
+        DiscardPoints,
+        EnemyAttacked,
+        EnemyDefeated,
+        CardAddedToDiscard,
+        CardAddedToHand,
+        CardAddedToTavern,
+        YouDied,
+        YouSurvived,
+        YouSurvivedThisRound,
     };
 
 }

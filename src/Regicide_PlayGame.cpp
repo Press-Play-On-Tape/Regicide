@@ -49,6 +49,7 @@ void Game::game_Init() {
 //
 void Game::game() {
 
+    bool castleDeck_DisplayCard = true;
     uint8_t currentPlayer = this->gamePlay.getCurrentPlayer();
     Hand& currentHand = this->hands[currentPlayer];
     Card &currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
@@ -243,7 +244,7 @@ void Game::game() {
                         
                         this->gamePlay.setHealthToDiscard(currentEnemy.getAttack() - currentHand.getShieldValue());
                         this->deck.print();
-                        gameState = GameState::Game_Step2_Activate;
+                        this->gameState = GameState::Game_Step2_Activate;
                         currentHand.setCardsAdded(0);
 
 
@@ -257,11 +258,11 @@ void Game::game() {
 
                     case Constants::CardCursor_Yield:
                         dealCounter = 0;
-                        cardCursor = 0;
                         currentHand.clearMarks();
                         currentHand.setCardsAdded(0);
+                        this->cardCursor = 0;
                         this->gamePlay.setHealthToDiscard(currentEnemy.getAttack());
-                        gameState = GameState::Game_Step4_SufferDamage;
+                        this->gameState = GameState::Game_Step4_SufferDamage;
                         break;
 
 
@@ -328,9 +329,9 @@ void Game::game() {
 
             }
 
-            dealCounter = 10 * currentHand.getAttackValue(true);
-            if (dealCounter > 100) dealCounter = 100;
-            gameState = GameState::Game_Step3_DealDamage;
+            dealCounter = (Constants::AttackInterval * ((currentHand.getAttackValue(true) + 1) / 2)) + Constants::AttackLength;
+            if (dealCounter > (Constants::AttackInterval * Constants::AttackMax) + Constants::AttackLength) dealCounter = (16 * Constants::AttackMax) + Constants::AttackLength;
+            this->gameState = GameState::Game_Step3_DealDamage;
 
             break;
 
@@ -340,19 +341,19 @@ void Game::game() {
 
             dealCounter--;
 
-            if (dealCounter % 10 == 0 && dealCounter > 0) {
-printf("%i\n", dealCounter);
+            if ((dealCounter - Constants::AttackLength) % Constants::AttackInterval == 0 && dealCounter > Constants::AttackLength) {
+// printf("%i\n", dealCounter);
 
                 this->attacks.launchAttach();
 
-                for (uint8_t i = 0; i < 6; i++) {
-                    printf("{%i = %i) ", i, (uint16_t)this->attacks.getAttack(i).getIndex());
-                }
-                printf("\n");
+                // for (uint8_t i = 0; i < Constants::AttackMax; i++) {
+                //     printf("{%i = %i) ", i, (uint16_t)this->attacks.getAttack(i).getIndex());
+                // }
+                // printf("\n");
 
             }
             else if (dealCounter == 0) {  
-
+// printf("Move to ?\n");
                 uint8_t attack = currentHand.getAttackValue(true);
                 //Card &currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
 
@@ -362,12 +363,14 @@ printf("%i\n", dealCounter);
 
                     if (!endOfGame) {
                         this->deck.addCard(DeckTypes::Tavern, currentEnemy);
-                        dealCounter = 0;
-                        gameState = GameState::Game_Step1_Play;                    
+                        dealCounter = 50;
+// printf("Move to 5a\n");
+                        this->gameState = GameState::Game_Step5_EnemyDead;
 
                     }
                     else {
-                        gameState = GameState::Winner_Init;
+// printf("Move to Winner\n");
+                        this->gameState = GameState::Winner_Init;
                     }
 
                 }
@@ -378,20 +381,35 @@ printf("%i\n", dealCounter);
                     if (!endOfGame) {
 
                         this->deck.addCard(DeckTypes::Discard, currentEnemy);
-                        dealCounter = 0;
-                        gameState = GameState::Game_Step1_Play;                    
+                        dealCounter = 50;
+// printf("Move to 5b\n");
+                        this->gameState = GameState::Game_Step5_EnemyDead;                    
 
                     }
                     else {
-                        gameState = GameState::Winner_Init;
+// printf("Move to Winner\n");
+                        this->gameState = GameState::Winner_Init;
                     }   
 
                 }
                 else {
+// printf("Move to 4\n");
+
                     currentEnemy.print();
                     currentEnemy.setHealth(currentEnemy.getHealth() - attack);
                     dealCounter = 0;
-                    gameState = GameState::Game_Step4_SufferDamage;                    
+
+                    if (this->gamePlay.getHealthToDiscard() == 0) {
+
+                        this->gameState = GameState::Game_SwapPlayers_Init;                    
+
+                    }
+                    else {
+
+                        this->gameState = GameState::Game_Step4_SufferDamage;                    
+
+                    }
+
                 }
 
 
@@ -504,8 +522,30 @@ printf("%i\n", dealCounter);
 
             break;
 
+        // ------------------------------------------------------------------------------------------------------------
+        
+        case GameState::Game_Step5_EnemyDead:
+
+            dealCounter--;
+
+            switch (dealCounter) {
+
+                case 0:
+                    this->gameState = GameState::Game_Step1_Play;
+                    break;
+
+                default:
+                    castleDeck_DisplayCard = false;
+                    break;
+
+            }
+
+            break;
+
     }
 
+
+//TODO if player kills enemy and plays again then adding two lots of cards to other player's deck should add not replace.
 
 
 
@@ -518,7 +558,7 @@ printf("%i\n", dealCounter);
     // Upper decks ..
 
     PD::drawBitmap(4, 1, Images::Banner_Castle);
-    this->renderCastleDeck(5, 11, this->deck.getIndex(DeckTypes::Castle) + 1);
+    this->renderCastleDeck(5, 11, this->deck.getIndex(DeckTypes::Castle) + 1, castleDeck_DisplayCard);
 
     PD::drawBitmap(84, 1, Images::Banner_Discard);
     this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1);
@@ -554,21 +594,22 @@ printf("%i\n", dealCounter);
 
     PD::setCursor(0, 110);
     PD::setColor(1, 14);
-    PD::print("Player ");
-    PD::print(static_cast<uint16_t>(this->gamePlay.getCurrentPlayer() + 1));
 
     switch (this->gameState) {
 
         case GameState::Game_Step1_Play:
         case GameState::Game_Step4_SufferDamage:
-            this->renderPlayerHand(currentPlayer, 1, 144, cardCursor, currentHand.getCardsAdded());
+            this->renderPlayerHand(currentPlayer, 1, 140, cardCursor, currentHand.getCardsAdded());
             break;
             
         default:
-            this->renderPlayerHand(currentPlayer, 1, 144, Constants::NoSelection, currentHand.getCardsAdded());
+            this->renderPlayerHand(currentPlayer, 1, 140, Constants::NoSelection, currentHand.getCardsAdded());
             break;
 
     }
+
+    PD::drawBitmap(1, 166, Images::Player);
+    PD::drawBitmap(35, 167, Images::MediumNumbers[this->gamePlay.getCurrentPlayer() + 1]);
 
 
 
@@ -613,12 +654,7 @@ printf("%i\n", dealCounter);
     switch (this->gameState) {
 
         case GameState::Game_Step0_AddCards:
-
-            PD::setColor(2, 3);
-            PD::setCursor(0, 120);
-            PD::print(static_cast<uint16_t>(currentHand.getCardsAdded()));
-            PD::print(" cards added.");
-
+            this->renderCaption(Caption::CardAddedToYourHand);
             this->renderAttackButton(ButtonState::Disabled);
             this->renderYieldButton(ButtonState::Disabled);
 
@@ -626,10 +662,7 @@ printf("%i\n", dealCounter);
 
         case GameState::Game_Step1_Play:
 
-            PD::setColor(2, 14);
-            PD::setCursor(0, 120);
-            PD::print("Attack enemy or yield.");
-
+            this->renderCaption(Caption::AttackOrYield);
             this->renderAttackButton(cardCursor == Constants::CardCursor_Attack ? ButtonState::Highlighted : (currentHand.isValidAttack() ? ButtonState::Enabled : ButtonState::Disabled));
             this->renderYieldButton(cardCursor == Constants::CardCursor_Yield ? ButtonState::Highlighted : ButtonState::Enabled);
 
@@ -647,19 +680,16 @@ printf("%i\n", dealCounter);
                 uint8_t attack = currentHand.getAttackValue();
                 Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
 
-                PD::setColor(2, 14);
-                PD::setCursor(0, 120);
-
                 if (dealCounter > 0) {
 
-                    PD::print("Attacking the enemy.");
+                    this->renderCaption(Caption::AttackingTheEnemy);
 
-                    for (uint8_t i = 0; i < 6; i++) {
+                    for (uint8_t i = 0; i < Constants::AttackMax; i++) {
 
-                        if (this->attacks.getAttack(i).getIndex() == 0) {
+                        if (this->attacks.getAttack(i).getIndex() > 0) {
 
                             Attack &attack = this->attacks.getAttack(i);
-                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Explosion[attack.getIndex() % 6]);
+                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Explosion[attack.getIndex() / (Constants::AttackLength / 7)]);
 
                         }
 
@@ -669,13 +699,13 @@ printf("%i\n", dealCounter);
                 else {
 
                     if (attack == currentEnemy.getHealth()) {
-                        PD::print("Enemy killed. Added to Tavern deck.");
+                        this->renderCaption(Caption::EnemyDefeated, Caption::CardAddedToTavern);
                     }
                     else if (attack > currentEnemy.getHealth()) {
-                        PD::print("Enemy killed. Added to Discard deck.");
+                        this->renderCaption(Caption::EnemyDefeated, Caption::CardAddedToDiscard);
                     }
                     else {
-                        PD::print("Enemy attacked.");
+                        this->renderCaption(Caption::EnemyAttacked);
                     }
 
                 }
@@ -698,9 +728,21 @@ printf("%i\n", dealCounter);
                 switch (dealCounter) {
 
                     case 0:
-                        PD::print("Player attacked, discard ");
-                        PD::print(static_cast<uint16_t>(this->gamePlay.getHealthToDiscard()));
-                        PD::print(" points.");
+                        {
+                            this->renderCaption(Caption::YouSurvivedThisRound, Caption::DiscardPoints);
+
+                            uint8_t digits[3] = {};
+                            uint8_t x = 46;
+
+                            extractDigits(digits, this->gamePlay.getHealthToDiscard());
+
+                            for (uint8_t i = 0; i < 2; ++i) {
+                                PD::drawBitmap(x, 127, Images::MediumNumbers[digits[i]]);
+                                x = x - 5;
+                            }
+
+                        }  
+
                         break;
 
                     default:
@@ -708,11 +750,11 @@ printf("%i\n", dealCounter);
                         switch (this->gamePlay.getHealthToDiscard()) {
 
                             case 0:
-                                PD::print("Player survives this round.");
+                                this->renderCaption(Caption::YouSurvivedThisRound);
                                 break;
 
                             default:
-                                PD::print("Player killed. End of Game.");
+                                this->renderCaption(Caption::YouDied);
                                 break;
 
                         }
@@ -724,6 +766,10 @@ printf("%i\n", dealCounter);
             this->renderAttackButton(ButtonState::Disabled);
             this->renderYieldButton(ButtonState::Disabled);
 
+            break;
+
+        case GameState::Game_Step5_EnemyDead:
+            this->renderCaption(Caption::EnemyDefeated);
             break;
 
         default:

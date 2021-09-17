@@ -5,6 +5,12 @@ using PC = Pokitto::Core;
 using PD = Pokitto::Display;
 
 
+void Game::renderCard_Blank(int16_t x, int16_t y) { 
+
+    PD::drawBitmap(x, y, Images::Card_Front_Normal);
+
+}
+
 void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool logo) { 
 
     PD::drawBitmap(x, y, highlight ? Images::Card_Front_Highlight : Images::Card_Front_Normal);
@@ -139,13 +145,13 @@ void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t sel
 
     if (drawSpacer) {
         PD::setColor(3);
-        PD::drawFastVLine(146, 144, 40);
+        PD::drawFastVLine(146, 140, 40);
     }
 
 }
 
 
-void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards) { 
+void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard) { 
 
     uint8_t endCard = this->deck.getIndex(DeckTypes::Castle);
     uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
@@ -161,8 +167,17 @@ void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards) {
 
         for (uint8_t i = startCard; i <= endCard; i++) {
 
-            Card card = this->deck.getCard(DeckTypes::Castle, i);
-            this->renderCard(x, y, card, false, false);
+            if (i < endCard) {
+                this->renderCard_Blank(x, y);
+            }
+            else if (!displayTopCard) {
+                PD::drawBitmap(x, y, Images::Card_Back);
+            }
+            else {
+                Card card = this->deck.getCard(DeckTypes::Castle, i);
+                this->renderCard(x, y, card, false, false);
+            }
+            
             x = x + 2;
 
         }
@@ -215,8 +230,14 @@ void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards) {
 
         for (uint8_t i = startCard; i < endCard; i++) {
 
-            Card card = this->deck.getCard(DeckTypes::Discard, i);
-            this->renderCard(x, y, card, false, true);
+            if (i < endCard - 1) {
+                this->renderCard_Blank(x, y);
+            }
+            else {
+                Card card = this->deck.getCard(DeckTypes::Discard, i);
+                this->renderCard(x, y, card, false, true);
+            }
+            
             x = x + 2;
 
         }
@@ -278,5 +299,30 @@ void Game::renderLegend(Hand &currentHand) {
     selected = currentHand.getMarkedSuit(CardSuit::Spades) || this->deck.getShield();
     PD::drawBitmap(158, 139, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Spades)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Spades)]);
     PD::drawBitmap(170, 140, selected ? Images::Legend_Shield_Highlight : Images::Legend_Shield_Grey);
+
+}
+
+void Game::renderCaption(Caption caption) {
+
+    this->renderCaption(caption, Caption::None);
+
+}
+
+void Game::renderCaption(Caption caption1, Caption caption2) {
+
+    PD::setColor(0);
+
+    if (caption2 == Caption::None) {
+        PD::fillRect(1, 116, 145, 8);
+    }
+    else {
+        PD::fillRect(1, 116, 145, 18);
+    }
+
+    PD::drawBitmap(2, 117, Images::Captions[static_cast<uint8_t>(caption1)]);
+
+    if (caption2 != Caption::None) {
+        PD::drawBitmap(2, 127, Images::Captions[static_cast<uint8_t>(caption2)]);
+    }
 
 }

@@ -8,10 +8,9 @@ struct Attacks {
 
     private:
 
-        Attack attacks[6];
+        Attack attacks[Constants::AttackMax];
         uint8_t x;
         uint8_t y;
-
 
     public: // Properties
 
@@ -22,13 +21,18 @@ struct Attacks {
 
         void launchAttach() {
 
-            for (uint8_t i = 0; i < 6; i++) {
+            const uint8_t x[] = { 10, 20 };
+            const uint8_t y[] = { 20, 35 };
+
+            for (uint8_t i = 0; i < Constants::AttackMax; i++) {
 
                 if (this->attacks[i].getIndex() == 0) {
+                    
+                    uint8_t j = i % 2;
 
-                    this->attacks[i].setX(random(20, 40));
-                    this->attacks[i].setY(random(20, 60));
-                    this->attacks[i].setIndex(41); // 6
+                    this->attacks[i].setX(x[j] + random(-5, 5));
+                    this->attacks[i].setY(y[j] + random(-5, 5));
+                    this->attacks[i].setIndex(Constants::AttackLength - 1); 
                     break;
 
                 }
@@ -39,7 +43,7 @@ struct Attacks {
 
         void update() {
 
-            for (uint8_t i = 0; i < 6; i++) {
+            for (uint8_t i = 0; i < Constants::AttackMax; i++) {
 
                 this->attacks[i].update();
 
