@@ -64,16 +64,82 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool log
 }
 
 
-void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selecteIndex, uint8_t cardsToSuppress) { 
+void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selectedIndex, uint8_t cardsToSuppress) { 
+
+    uint8_t spacing = 18;
+    uint8_t offset = 0;
+    bool drawSpacer = false;
+
+    switch (this->hands[playerIdx].getCardIndex() - cardsToSuppress + 1) {
+
+        case 1:
+            offset = 72 - Constants::CardWidth_Half;
+            break;
+
+        case 2:
+            offset = 72 - (Constants::CardWidth_Half + 9);
+            break;
+
+        case 3:
+            offset = 72 - (Constants::CardWidth_Half + 18);
+            break;
+
+        case 4:
+            offset = 72 - (Constants::CardWidth_Half + 27);
+            break;
+
+        case 5:
+            offset = 72 - (Constants::CardWidth_Half + 36);
+            break;
+
+        case 6:
+            offset = 72 - (Constants::CardWidth_Half + 45);
+            break;
+
+        case 7:
+            offset = 2;
+            spacing = 17;
+            break;
+
+        case 8:
+            offset = 0;
+            spacing = 15;
+            break;
+
+        case 9:
+            offset = 0;
+            spacing = 13;
+            drawSpacer = true;
+            break;
+
+        case 10:
+            offset = 0;
+            spacing = 13;
+            drawSpacer = true;
+            break;
+
+        case 11:
+            offset = 0;
+            spacing = 13;
+            drawSpacer = true;
+            break;
+
+
+    }
 
     for (uint8_t i = 0; i <= this->hands[playerIdx].getCardIndex() - cardsToSuppress; i++) {
 
         Card card = this->hands[playerIdx].getCard(i);
         bool marked = this->hands[playerIdx].isMarked(i);
 
-        this->renderCard(x, y - (marked ? 10 : 0), card, i == selecteIndex, false);
-        x = x + 17;
+        this->renderCard(x + offset, y - (marked ? 10 : 0), card, i == selectedIndex, false);
+        x = x + spacing;
 
+    }
+
+    if (drawSpacer) {
+        PD::setColor(3);
+        PD::drawFastVLine(146, 144, 40);
     }
 
 }
@@ -209,7 +275,7 @@ void Game::renderLegend(Hand &currentHand) {
     PD::drawBitmap(158, 129, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Clubs)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Clubs)]);
     PD::drawBitmap(170, 130, selected ? Images::Legend_Damage_Highlight : Images::Legend_Damage_Grey);
 
-    selected = currentHand.getMarkedSuit(CardSuit::Spades);
+    selected = currentHand.getMarkedSuit(CardSuit::Spades) || this->deck.getShield();
     PD::drawBitmap(158, 139, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Spades)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Spades)]);
     PD::drawBitmap(170, 140, selected ? Images::Legend_Shield_Highlight : Images::Legend_Shield_Grey);
 

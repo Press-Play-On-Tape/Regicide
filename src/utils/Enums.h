@@ -1,6 +1,6 @@
 #pragma once
 
-#define _DEBUG
+#define DEBUG
 #define _SOUNDS
 #define COOKIE_INITIALISED 42
 
@@ -21,6 +21,9 @@ namespace Constants {
     constexpr uint8_t CardCursor_Attack = 100;
     constexpr uint8_t CardCursor_Yield = 101;
     constexpr uint8_t DealDelay = 15;
+    constexpr uint8_t CardWidth = 40;
+    constexpr uint8_t CardWidth_Half = 20;
+    constexpr uint8_t NoSelection = 255;
 
 }
 

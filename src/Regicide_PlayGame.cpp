@@ -34,7 +34,12 @@ void Game::game_Init() {
         
     }
 
-    dealCounter = 0;
+// Card card;
+// for (uint8_t i = 0; i < 11; i++) {
+// this->deck.dealCard(DeckTypes::Tavern, card);
+// this->hands[0].addCard(card);
+// }
+// this->gameState = GameState::Game_Step1_Play;
 
 }   
 
@@ -235,10 +240,19 @@ void Game::game() {
                         break;
 
                     case Constants::CardCursor_Attack:
+                        
                         this->gamePlay.setHealthToDiscard(currentEnemy.getAttack() - currentHand.getShieldValue());
-                        gameState = GameState::Game_Step2_Activate;
                         this->deck.print();
+                        gameState = GameState::Game_Step2_Activate;
                         currentHand.setCardsAdded(0);
+
+
+                        // If the player has played a shield save it for the life of the current enemy ..
+
+                        if (currentHand.getMarkedSuit(CardSuit::Spades)) {
+                            this->deck.setShield(true);
+                        }
+
                         break;
 
                     case Constants::CardCursor_Yield:
@@ -314,7 +328,8 @@ void Game::game() {
 
             }
 
-            dealCounter = 50;
+            dealCounter = 10 * currentHand.getAttackValue(true);
+            if (dealCounter > 100) dealCounter = 100;
             gameState = GameState::Game_Step3_DealDamage;
 
             break;
@@ -325,7 +340,18 @@ void Game::game() {
 
             dealCounter--;
 
-            if (dealCounter == 0) {  
+            if (dealCounter % 10 == 0 && dealCounter > 0) {
+printf("%i\n", dealCounter);
+
+                this->attacks.launchAttach();
+
+                for (uint8_t i = 0; i < 6; i++) {
+                    printf("{%i = %i) ", i, (uint16_t)this->attacks.getAttack(i).getIndex());
+                }
+                printf("\n");
+
+            }
+            else if (dealCounter == 0) {  
 
                 uint8_t attack = currentHand.getAttackValue(true);
                 //Card &currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
@@ -458,7 +484,8 @@ void Game::game() {
                             currentPlayer++;
                             currentPlayer = currentPlayer % this->gamePlay.getNumberOfPlayers();
                             currentHand.setShieldValue(0);
-                            // currentHand = this->hands[currentPlayer];
+                            currentHand.clearMarks();
+
                             this->gamePlay.setCurrentPlayer(currentPlayer);
                             this->cardCursor = 0;
 
@@ -488,14 +515,6 @@ void Game::game() {
     PD::fillScreen(3);
 
 
-    // Render background ..
-
-    for (uint8_t y = 0; y < 176; y = y + 32) {
-
-        PD::drawBitmap(147, y, Images::RightSidePanel);
-
-    }
-
     // Upper decks ..
 
     PD::drawBitmap(4, 1, Images::Banner_Castle);
@@ -503,9 +522,6 @@ void Game::game() {
 
     PD::drawBitmap(84, 1, Images::Banner_Discard);
     this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1);
-
-    PD::drawBitmap(159, 1, Images::Banner_Tavern);
-    this->renderTavernDeck(160, 11, this->deck.getIndex(DeckTypes::Tavern) + 1);
 
     uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
     PD::drawBitmap(5, 89, Images::AttackHealth);
@@ -541,7 +557,32 @@ void Game::game() {
     PD::print("Player ");
     PD::print(static_cast<uint16_t>(this->gamePlay.getCurrentPlayer() + 1));
 
-    this->renderPlayerHand(currentPlayer, 3, 144, cardCursor, currentHand.getCardsAdded());
+    switch (this->gameState) {
+
+        case GameState::Game_Step1_Play:
+        case GameState::Game_Step4_SufferDamage:
+            this->renderPlayerHand(currentPlayer, 1, 144, cardCursor, currentHand.getCardsAdded());
+            break;
+            
+        default:
+            this->renderPlayerHand(currentPlayer, 1, 144, Constants::NoSelection, currentHand.getCardsAdded());
+            break;
+
+    }
+
+
+
+    // Render background ..
+
+    for (uint8_t y = 0; y < 176; y = y + 32) {
+
+        PD::drawBitmap(147, y, Images::RightSidePanel);
+
+    }
+
+    PD::drawBitmap(159, 1, Images::Banner_Tavern);
+    this->renderTavernDeck(160, 11, this->deck.getIndex(DeckTypes::Tavern) + 1);
+
     attack = currentHand.getAttackValue(false);
 
     PD::drawBitmap(162, 88, Images::AttackHealth);
@@ -609,14 +650,34 @@ void Game::game() {
                 PD::setColor(2, 14);
                 PD::setCursor(0, 120);
 
-                if (attack == currentEnemy.getHealth()) {
-                    PD::print("Enemy killed. Added to Tavern deck.");
-                }
-                else if (attack > currentEnemy.getHealth()) {
-                    PD::print("Enemy killed. Added to Discard deck.");
+                if (dealCounter > 0) {
+
+                    PD::print("Attacking the enemy.");
+
+                    for (uint8_t i = 0; i < 6; i++) {
+
+                        if (this->attacks.getAttack(i).getIndex() == 0) {
+
+                            Attack &attack = this->attacks.getAttack(i);
+                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Explosion[attack.getIndex() % 6]);
+
+                        }
+
+                    }
+
                 }
                 else {
-                    PD::print("Enemy attacked.");
+
+                    if (attack == currentEnemy.getHealth()) {
+                        PD::print("Enemy killed. Added to Tavern deck.");
+                    }
+                    else if (attack > currentEnemy.getHealth()) {
+                        PD::print("Enemy killed. Added to Discard deck.");
+                    }
+                    else {
+                        PD::print("Enemy attacked.");
+                    }
+
                 }
 
             }
@@ -672,5 +733,7 @@ void Game::game() {
             break;
 
     }
+
+    this->attacks.update();
     
 }

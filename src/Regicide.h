@@ -23,9 +23,7 @@ class Game {
         GameCookie *cookie;
         Deck deck;
         Hand hands[4];
-
-
-
+        Attacks attacks;
 
         uint16_t dealCounter = 0;
         uint8_t cardCursor = 0;

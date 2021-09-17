@@ -8,7 +8,7 @@ struct Hand {
 
     private:
 
-        #define HAND_SIZE 12
+        #define HAND_SIZE 15
 
         Card cards[HAND_SIZE];
         bool mark[HAND_SIZE];

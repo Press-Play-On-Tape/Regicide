@@ -8,6 +8,8 @@ struct Deck {
 
     private:
 
+        bool shield = false;
+
         Card castleDeck[12];
         Card tavernDeck[42];
         Card discardDeck[42];
@@ -35,10 +37,14 @@ struct Deck {
 
         } 
 
-    public: 
+    public: // Properties
+
+        bool getShield()                { return this->shield; }
+        void setShield(bool val)        { this->shield = val; }
+
+    public: // Methods
 
         Deck() { };
-
 
         void init(GameMode gameMode) {
 
@@ -98,22 +104,23 @@ struct Deck {
                 case DeckTypes::Castle:
                     card = this->castleDeck[this->castleDeckIndex];
                     card.print();
-                    castleDeck[this->castleDeckIndex].init(Cards::NoCard);
-                    castleDeckIndex--;
+                    this->castleDeck[this->castleDeckIndex].init(Cards::NoCard);
+                    this->castleDeckIndex--;
+                    this->shield = false;
                     break;
 
                 case DeckTypes::Tavern:
                     card = this->tavernDeck[this->tavernDeckIndex];
                     card.print();
-                    tavernDeck[this->tavernDeckIndex].init(Cards::NoCard);
-                    tavernDeckIndex--;
+                    this->tavernDeck[this->tavernDeckIndex].init(Cards::NoCard);
+                    this->tavernDeckIndex--;
                     break;
 
                 case DeckTypes::Discard:
                     card = this->discardDeck[this->discardDeckIndex];
                     card.print();
-                    discardDeck[this->discardDeckIndex].init(Cards::NoCard);
-                    discardDeckIndex--;
+                    this->discardDeck[this->discardDeckIndex].init(Cards::NoCard);
+                    this->discardDeckIndex--;
                     break;
 
             }
@@ -209,7 +216,6 @@ struct Deck {
             }
 
         }
-
 
         void print() {
 
