@@ -42,6 +42,8 @@ class Game {
         void game();
         void title_Init();
         void title();
+        void numberOfPlayers_Init();
+        void numberOfPlayers();
         void gameOver_Init();
         void gameOver();
         void winner_Init();

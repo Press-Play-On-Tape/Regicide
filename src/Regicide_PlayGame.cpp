@@ -236,9 +236,9 @@ void Game::game() {
 
                 switch (cardCursor) {
 
-                    case 0 ... 10:
-                        currentHand.markCard(cardCursor);
-                        break;
+                    // case 0 ... 10:
+                    //     currentHand.markCard(cardCursor);
+                    //     break;
 
                     case Constants::CardCursor_Attack:
                         
@@ -460,7 +460,7 @@ void Game::game() {
 
                     }
 
-                    if (PC::buttons.pressed(BTN_A)) {
+                    if (PC::buttons.pressed(BTN_UP)) {
 
                         Card card = currentHand.getCard(cardCursor);
                         currentHand.removeCard(cardCursor);

@@ -41,10 +41,8 @@ void Game::gameSwapPlayers() {
 
     // Render page ..
 
-    PD::fillScreen(3);
-
-    PD::setCursor(7, 14);
-    PD::setColor(6);
-    PD::print("Swap Players");
+    PD::drawBitmap(0, 0, Images::Background);
+    PD::drawBitmap(24, 1, Images::Title_01);
+    PD::drawBitmap(25, 85, Images::SwapPlayers);
 
 }

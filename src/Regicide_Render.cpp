@@ -54,11 +54,13 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool log
         case 11:    
             PD::setCursor(x + 4, y + 4);
             PD::print("Q");
+            PD::drawBitmap(x + 4, y + 7, Images::Queens[static_cast<uint8_t>(card.getSuit())]);
             break;
 
         case 12:    
             PD::setCursor(x + 4, y + 4);
             PD::print("K");
+            PD::drawBitmap(x + 4, y + 7, Images::Kings[static_cast<uint8_t>(card.getSuit())]);
             break;
 
 

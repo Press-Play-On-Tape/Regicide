@@ -26,13 +26,15 @@ void Game::title() {
 
     if (PC::buttons.pressed(BTN_A)) { 
 
-        this->gameState = GameState::Game_Init;
+        this->gameState = GameState::NoOfPlayers_Init;
 
     }         
 
 
     // Render page ..
 
-    PD::drawBitmap(10, 4, Images::Title);
+    PD::drawBitmap(0, 0, Images::Background);
+    PD::drawBitmap(24, 1, Images::Title_01);
+    PD::drawBitmap(27, 84, Images::Title_02);
 
 }

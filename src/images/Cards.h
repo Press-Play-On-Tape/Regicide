@@ -27,6 +27,16 @@ namespace Images {
     #include "cards/Jack_Diamonds.h"
     #include "cards/Jack_Hearts.h"
 
+    #include "cards/Queen_Clubs.h"
+    #include "cards/Queen_Spades.h"
+    #include "cards/Queen_Diamonds.h"
+    #include "cards/Queen_Hearts.h"
+
+    #include "cards/King_Clubs.h"
+    #include "cards/King_Spades.h"
+    #include "cards/King_Diamonds.h"
+    #include "cards/King_Hearts.h"
+
     #include "cards/Logo.h"
 
     const uint8_t * const Suits_Coloured[] = { 
@@ -57,4 +67,17 @@ namespace Images {
         Jack_Hearts,
     };
 
+    const uint8_t * const Queens[] = { 
+        Queen_Spades,
+        Queen_Clubs,
+        Queen_Diamonds,
+        Queen_Hearts,
+    };
+
+    const uint8_t * const Kings[] = { 
+        King_Spades,
+        King_Clubs,
+        King_Diamonds,
+        King_Hearts,
+    };
 }
