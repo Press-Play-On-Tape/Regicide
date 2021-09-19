@@ -41,23 +41,17 @@ struct Card {
 
         CardSuit getSuit() {
 
-            if (this->cardIndex == Cards::Joker) { return CardSuit::Jokers; } 
-
             return static_cast<CardSuit>(this->cardIndex / 13);
         
         }
 
         uint8_t getNumber() {
 
-            if (this->cardIndex == Cards::Joker) { return Cards::Joker; } 
-
             return this->cardIndex % 13;
         
         }
 
         uint8_t getHealthPoints() {
-
-            if (this->cardIndex == Cards::Joker) { return Cards::Joker; } 
 
             switch (this->cardIndex % 13) {
 
@@ -83,12 +77,7 @@ struct Card {
 
             #ifdef DEBUG
 
-                if (this->cardIndex == Cards::Joker) {
-                    
-                    printf("JO ");
-
-                }
-                else if (this->cardIndex == Cards::NoCard) {
+                if (this->cardIndex == Cards::NoCard) {
                     
                     printf("-- ");
 

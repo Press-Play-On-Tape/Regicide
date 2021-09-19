@@ -28,6 +28,9 @@ class Game {
         uint16_t dealCounter = 0;
         uint8_t cardCursor = 0;
 
+        uint8_t heartsCounter = 0;
+        uint8_t diamondsCounter = 0;
+
 
 
     public:
@@ -61,7 +64,7 @@ class Game {
         void renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selecteIndex, uint8_t cardsToSuppress);
         void renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
         void renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards);
-        void renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards);
+        void renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
         void renderAttackButton(ButtonState state);
         void renderYieldButton(ButtonState state);
         void renderLegend(Hand &currentHand);

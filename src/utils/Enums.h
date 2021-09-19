@@ -1,6 +1,6 @@
 #pragma once
 
-#define _DEBUG
+#define DEBUG
 #define _SOUNDS
 #define COOKIE_INITIALISED 42
 
@@ -10,7 +10,6 @@ namespace Cards {
     constexpr uint8_t Jack = 10;
     constexpr uint8_t Queen = 11;
     constexpr uint8_t King = 12;
-    constexpr uint8_t Joker = 99;
     constexpr uint8_t NoCard = 98;
 
 }
@@ -20,7 +19,7 @@ namespace Constants {
     constexpr uint8_t MaxNumberOfCards[] = { 0, 8, 7, 6, 5 };
     constexpr uint8_t CardCursor_Attack = 100;
     constexpr uint8_t CardCursor_Yield = 101;
-    constexpr uint8_t DealDelay = 15;
+    constexpr uint8_t DealDelay = 8;
     constexpr uint8_t CardWidth = 40;
     constexpr uint8_t CardWidth_Half = 20;
     constexpr uint8_t NoSelection = 255;
@@ -35,8 +34,6 @@ enum class GameMode : uint8_t {
     NoPlayers,
     OnePlayer,
     TwoPlayers,
-    ThreePlayers,
-    FourPlayers,
 };
 
 enum class GameState : uint8_t {
@@ -80,7 +77,6 @@ enum class CardSuit : uint8_t {
     Clubs,
     Diamonds,
     Hearts,
-    Jokers
 };
 
 enum class DeckTypes : uint8_t {
@@ -104,8 +100,15 @@ enum class Caption : uint8_t {
     CardAddedToDiscard,
     CardAddedToYourHand,
     CardAddedToTavern,
+    CardsAddedToTavern,
     YouDied,
     YouSurvived,
     YouSurvivedThisRound,
     None
+};
+
+enum class EnemyKilledType : uint8_t {
+    None,
+    Tavern,
+    Discard,
 };

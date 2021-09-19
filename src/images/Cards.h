@@ -17,6 +17,7 @@ namespace Images {
     #include "cards/Clubs_Disabled.h"
     #include "cards/Spades_Disabled.h"
     
+    #include "cards/Card_Front_Normal_Half.h"
     #include "cards/Card_Front_Normal.h"
     #include "cards/Card_Front_Highlight.h"
     #include "cards/Card_Back.h"

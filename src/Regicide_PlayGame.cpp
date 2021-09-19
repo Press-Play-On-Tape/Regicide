@@ -12,8 +12,8 @@ using PD = Pokitto::Display;
 void Game::game_Init() {
 
     this->gameState = GameState::Game_NewHand;
-    this->gamePlay.init(GameMode::TwoPlayers);
-    this->deck.init(GameMode::TwoPlayers);
+    this->gamePlay.init(static_cast<GameMode>(this->gamePlay.getNumberOfPlayers()));
+    this->deck.init(static_cast<GameMode>(this->gamePlay.getNumberOfPlayers()));
 
     this->deck.print();
 
@@ -97,8 +97,6 @@ void Game::game() {
                             this->deck.dealCard(DeckTypes::Tavern,card);
                             this->hands[i].addCard(card);
                         }
-
-                        if ( this->gamePlay.getNumberOfPlayers() > 2) dealCounter = (Constants::DealDelay * 9) - 1;
                         break;
                     
                     case Constants::DealDelay * 7:
@@ -107,10 +105,12 @@ void Game::game() {
                             this->hands[i].addCard(card);
                         }
 
-                        if ( this->gamePlay.getNumberOfPlayers() > 3) dealCounter = (Constants::DealDelay * 9) - 1;
+                        if (this->gamePlay.getNumberOfPlayers() > 1) {
+                            printf("huh\n");dealCounter = (Constants::DealDelay * 9) - 1;}
                         break;
                     
                     case Constants::DealDelay * 8:
+                    printf("deal 8\n");
                         for (uint8_t i = 0; i < this->gamePlay.getNumberOfPlayers(); i++) {
                             this->deck.dealCard(DeckTypes::Tavern,card);
                             this->hands[i].addCard(card);
@@ -118,6 +118,11 @@ void Game::game() {
                         break;
 
                     case Constants::DealDelay * 9:
+
+
+this->hands[0].getCard(0).init(22);//SJH
+
+
                         this->gameState = GameState::Game_Step1_Play;
                         break;
 
@@ -248,6 +253,20 @@ void Game::game() {
                         currentHand.setCardsAdded(0);
 
 
+                        // Set delays .. hearts done first.
+
+                        if (currentHand.getMarkedSuit(CardSuit::Hearts) && currentHand.getEnemyCardSuit() != CardSuit::Hearts && this->deck.getIndex(DeckTypes::Discard) >= 0) {
+
+                            heartsCounter = 20;
+printf("Hearts\n");
+                        }
+
+                        if (currentHand.getMarkedSuit(CardSuit::Diamonds) && currentHand.getEnemyCardSuit() != CardSuit::Diamonds && this->deck.getIndex(DeckTypes::Tavern) >= 0) {
+
+                            diamondsCounter = 21;
+
+                        }
+
                         // If the player has played a shield save it for the life of the current enemy ..
 
                         if (currentHand.getMarkedSuit(CardSuit::Spades)) {
@@ -278,60 +297,79 @@ void Game::game() {
 
             // Play hearts ..
 
-            if (currentHand.getMarkedSuit(CardSuit::Hearts) && currentHand.getEnemyCardSuit() != CardSuit::Hearts) {
+            if (heartsCounter > 0) {
 
-                this->deck.shuffleDiscardDeck();
+                heartsCounter--;
 
-                for (uint8_t i = 0; i < currentHand.getAttackValue(false); i++) {
+                if (heartsCounter == 0) {
 
-                    if (this->deck.getIndex(DeckTypes::Discard) >= 0) {
+                    this->deck.shuffleDiscardDeck();
 
-                        Card card;
-                        this->deck.dealCard(DeckTypes::Discard, card);
-                        this->deck.addCardToBottom(DeckTypes::Tavern, card);
+                    for (uint8_t i = 0; i < currentHand.getAttackValue(false); i++) {
 
-                    }
-                    
-                } 
+                        if (this->deck.getIndex(DeckTypes::Discard) >= 0) {
+
+                            Card card;
+                            this->deck.dealCard(DeckTypes::Discard, card);
+                            this->deck.addCardToBottom(DeckTypes::Tavern, card);
+
+                        }
+                        
+                    } 
+
+                }
 
             }
 
             // Play diamonds ..
 
-            if (currentHand.getMarkedSuit(CardSuit::Diamonds) && currentHand.getEnemyCardSuit() != CardSuit::Diamonds) {
+            if (heartsCounter == 0 && diamondsCounter > 0) {
 
-                uint8_t playerIdx = currentPlayer;
-
-                for (uint8_t i = 0; i < currentHand.getAttackValue(false); i++) {
-// printf("Add Cards %i Tav: %i player %i, curIdx %i, max %i, Extras: %i >> ", i, this->deck.getIndex(DeckTypes::Tavern), playerIdx, this->hands[playerIdx].getCardIndex(), this->hands[playerIdx].getMaxNumberOfCards() , (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0));
-
-                    if (this->deck.getIndex(DeckTypes::Tavern) >= 0 && this->hands[playerIdx].getCardIndex() + 1 < this->hands[playerIdx].getMaxNumberOfCards() + (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0)) {
-//CHECK: if player has max cards do we just skip them and include next player or not?  Assume just skip.
-                        Card card;
-                        this->deck.dealCard(DeckTypes::Tavern, card);
-// printf("card ");                        
-// card.print();
-// printf("\n");
-                        this->hands[playerIdx].addCard(card);
-                        if (playerIdx != this->gamePlay.getCurrentPlayer()) {
-                            this->hands[playerIdx].incCardsAdded();
-                        }
-
-                    }
-//                     else {
-// printf("skip\n");                        
-//                     }
-
-                    playerIdx++;
-                    playerIdx = playerIdx % this->gamePlay.getNumberOfPlayers();
+                diamondsCounter--;
                     
-                } 
+                if (diamondsCounter == 0) {
+
+                    uint8_t playerIdx = currentPlayer;
+
+                    for (uint8_t i = 0; i < currentHand.getAttackValue(false); i++) {
+    // printf("Add Cards %i Tav: %i player %i, curIdx %i, max %i, Extras: %i >> ", i, this->deck.getIndex(DeckTypes::Tavern), playerIdx, this->hands[playerIdx].getCardIndex(), this->hands[playerIdx].getMaxNumberOfCards() , (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0));
+
+                        if (this->deck.getIndex(DeckTypes::Tavern) >= 0 && this->hands[playerIdx].getCardIndex() + 1 < this->hands[playerIdx].getMaxNumberOfCards() + (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0)) {
+    //CHECK: if player has max cards do we just skip them and include next player or not?  Assume just skip.
+                            Card card;
+                            this->deck.dealCard(DeckTypes::Tavern, card);
+    // printf("card ");                        
+    // card.print();
+    // printf("\n");
+                            this->hands[playerIdx].addCard(card);
+                            if (playerIdx != this->gamePlay.getCurrentPlayer()) {
+                                this->hands[playerIdx].incCardsAdded();
+                            }
+
+                        }
+    //                     else {
+    // printf("skip\n");                        
+    //                     }
+
+                        playerIdx++;
+                        playerIdx = playerIdx % this->gamePlay.getNumberOfPlayers();
+                        
+                    } 
+
+                }
 
             }
 
-            dealCounter = (Constants::AttackInterval * ((currentHand.getAttackValue(true) + 1) / 2)) + Constants::AttackLength;
-            if (dealCounter > (Constants::AttackInterval * Constants::AttackMax) + Constants::AttackLength) dealCounter = (16 * Constants::AttackMax) + Constants::AttackLength;
-            this->gameState = GameState::Game_Step3_DealDamage;
+
+            // Progress to next phase?
+
+            if (heartsCounter == 0 && diamondsCounter == 0) {
+
+                dealCounter = (Constants::AttackInterval * ((currentHand.getAttackValue(true) + 1) / 2)) + Constants::AttackLength;
+                if (dealCounter > (Constants::AttackInterval * Constants::AttackMax) + Constants::AttackLength) dealCounter = (16 * Constants::AttackMax) + Constants::AttackLength;
+                this->gameState = GameState::Game_Step3_DealDamage;
+
+            }
 
             break;
 
@@ -342,34 +380,31 @@ void Game::game() {
             dealCounter--;
 
             if ((dealCounter - Constants::AttackLength) % Constants::AttackInterval == 0 && dealCounter > Constants::AttackLength) {
-// printf("%i\n", dealCounter);
 
                 this->attacks.launchAttach();
 
-                // for (uint8_t i = 0; i < Constants::AttackMax; i++) {
-                //     printf("{%i = %i) ", i, (uint16_t)this->attacks.getAttack(i).getIndex());
-                // }
-                // printf("\n");
-
             }
             else if (dealCounter == 0) {  
-// printf("Move to ?\n");
-                uint8_t attack = currentHand.getAttackValue(true);
-                //Card &currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
 
+                uint8_t attack = currentHand.getAttackValue(true);
+                
+                Card prevEnemy;
+                EnemyKilledType enemyKilled = EnemyKilledType::None;
+
+                prevEnemy.init(currentEnemy.getCardIndex());
+                
                 if (attack == currentEnemy.getHealth()) {
 
                     bool endOfGame = this->changeAttackers(currentEnemy);
 
                     if (!endOfGame) {
-                        this->deck.addCard(DeckTypes::Tavern, currentEnemy);
+
+                        enemyKilled = EnemyKilledType::Tavern;
                         dealCounter = 50;
-// printf("Move to 5a\n");
                         this->gameState = GameState::Game_Step5_EnemyDead;
 
                     }
                     else {
-// printf("Move to Winner\n");
                         this->gameState = GameState::Winner_Init;
                     }
 
@@ -380,20 +415,17 @@ void Game::game() {
 
                     if (!endOfGame) {
 
-                        this->deck.addCard(DeckTypes::Discard, currentEnemy);
+                        enemyKilled = EnemyKilledType::Discard;
                         dealCounter = 50;
-// printf("Move to 5b\n");
                         this->gameState = GameState::Game_Step5_EnemyDead;                    
 
                     }
                     else {
-// printf("Move to Winner\n");
                         this->gameState = GameState::Winner_Init;
                     }   
 
                 }
                 else {
-// printf("Move to 4\n");
 
                     currentEnemy.print();
                     currentEnemy.setHealth(currentEnemy.getHealth() - attack);
@@ -424,6 +456,25 @@ void Game::game() {
                         currentHand.removeCard(i - 1);
 
                     }
+
+                }
+
+
+                // Discard the enemy if it is dead ..
+
+                switch (enemyKilled) {
+
+                    case EnemyKilledType::Discard:
+                        this->deck.addCard(DeckTypes::Discard, prevEnemy);
+                        this->deck.print();
+                        break;
+
+                    case EnemyKilledType::Tavern:
+                        this->deck.addCard(DeckTypes::Tavern, prevEnemy);
+                        this->deck.print();
+                        break;
+
+                    default: break;
 
                 }
 
@@ -496,16 +547,31 @@ void Game::game() {
                         int8_t pointsToDiscard = this->gamePlay.getHealthToDiscard();
 
                         if (pointsToDiscard == 0) { 
+printf("Swap Players 2\n");
 
-                            this->gameState = GameState::Game_SwapPlayers_Init;
+                            // Swpa players if more than one player is playing ..
 
-                            currentPlayer++;
-                            currentPlayer = currentPlayer % this->gamePlay.getNumberOfPlayers();
-                            currentHand.setShieldValue(0);
-                            currentHand.clearMarks();
+                            if (this->gamePlay.getNumberOfPlayers() > 1) {
 
-                            this->gamePlay.setCurrentPlayer(currentPlayer);
-                            this->cardCursor = 0;
+                                this->gameState = GameState::Game_SwapPlayers_Init;
+
+                                currentPlayer++;
+                                currentPlayer = currentPlayer % this->gamePlay.getNumberOfPlayers();
+                                currentHand.setShieldValue(0);
+                                currentHand.clearMarks();
+
+                                this->gamePlay.setCurrentPlayer(currentPlayer);
+                                this->cardCursor = 0;
+
+                            }
+                            else {
+
+                                currentHand.setShieldValue(0);
+                                currentHand.clearMarks();
+                                this->gameState = GameState::Game_Step1_Play;
+                                this->cardCursor = 0;
+                                
+                            }
 
                         }
                         else if (currentHand.getCardIndex() == -1) {
@@ -545,11 +611,9 @@ void Game::game() {
     }
 
 
-//TODO if player kills enemy and plays again then adding two lots of cards to other player's deck should add not replace.
-
-
-
-
+    // ---------------------------------------------------------------------------------------------------------------
+    // Render screen
+    // ---------------------------------------------------------------------------------------------------------------
 
 
     PD::fillScreen(3);
@@ -557,18 +621,18 @@ void Game::game() {
 
     // Upper decks ..
 
-    PD::drawBitmap(4, 1, Images::Banner_Castle);
-    this->renderCastleDeck(5, 11, this->deck.getIndex(DeckTypes::Castle) + 1, castleDeck_DisplayCard);
+    PD::drawBitmap(9, 1, Images::Banner_Castle);
+    this->renderCastleDeck(10, 11, this->deck.getIndex(DeckTypes::Castle) + 1, castleDeck_DisplayCard);
 
     PD::drawBitmap(84, 1, Images::Banner_Discard);
-    this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1);
+    this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1, heartsCounter == 0);
 
     uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
-    PD::drawBitmap(5, 89, Images::AttackHealth);
+    PD::drawBitmap(11, 89, Images::AttackHealth);
 
     {
         uint8_t digits[3] = {};
-        uint8_t x = 48;
+        uint8_t x = 51;
 
         extractDigits(digits, attack);
 
@@ -577,7 +641,7 @@ void Game::game() {
             x = x - 5;
         }
 
-        x = 48;
+        x = 51;
         extractDigits(digits, currentEnemy.getHealth());
 
         for (uint8_t i = 0; i < 2; ++i) {
@@ -669,6 +733,20 @@ void Game::game() {
             break;
 
         case GameState::Game_Step2_Activate:
+
+            if (heartsCounter > 0) {
+
+                PD::drawBitmap(168 - (heartsCounter * 4), 11, Images::Card_Back);
+                this->renderCaption(Caption::CardsAddedToTavern);
+
+            }
+
+            if (diamondsCounter > 0) {
+
+                PD::drawBitmap(90 + (diamondsCounter / 2), 140 - (diamondsCounter * 6), Images::Card_Back);
+                this->renderCaption(Caption::CardAddedToYourHand);
+
+            }
 
             this->renderAttackButton(ButtonState::Disabled);
             this->renderYieldButton(ButtonState::Disabled);

@@ -68,8 +68,6 @@ struct Deck {
             // Shuffle tavern deck ..
 
             tavernDeckCount = 40;
-            if (this->mode == GameMode::ThreePlayers)   this->tavernDeckCount = 41;
-            if (this->mode == GameMode::FourPlayers)    this->tavernDeckCount = 42;
             
             for (uint8_t i = 0, j = 0; i < 52; i++) {
 
@@ -79,9 +77,6 @@ struct Deck {
                 }
 
             }
-
-            this->tavernDeck[40].init(Cards::Joker);
-            this->tavernDeck[41].init(Cards::Joker);
 
             this->castleDeckIndex = 11;
             this->tavernDeckIndex = this->tavernDeckCount -1;
@@ -171,11 +166,17 @@ struct Deck {
                     break;
 
                 case DeckTypes::Tavern:
+printf("About to add ");
+card.print();                
+printf(" to tavern\n");
                     this->tavernDeckIndex++;
                     this->tavernDeck[this->tavernDeckIndex].init(card.getCardIndex());
                     break;
 
                 case DeckTypes::Discard:
+printf("About to add ");
+card.print();                
+printf(" to discard\n");
                     this->discardDeckIndex++;
                     this->discardDeck[this->discardDeckIndex].init(card.getCardIndex());
                     break;

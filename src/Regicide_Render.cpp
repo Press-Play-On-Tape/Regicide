@@ -7,7 +7,7 @@ using PD = Pokitto::Display;
 
 void Game::renderCard_Blank(int16_t x, int16_t y) { 
 
-    PD::drawBitmap(x, y, Images::Card_Front_Normal);
+    PD::drawBitmap(x, y, Images::Card_Front_Normal_Half);
 
 }
 
@@ -217,7 +217,7 @@ void Game::renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards) {
 
 }
 
-void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards) { 
+void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard) { 
 
     int8_t endCard = this->deck.getIndex(DeckTypes::Discard) + 1;
     uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
@@ -236,8 +236,15 @@ void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards) {
                 this->renderCard_Blank(x, y);
             }
             else {
-                Card card = this->deck.getCard(DeckTypes::Discard, i);
-                this->renderCard(x, y, card, false, true);
+
+                if (!displayTopCard) {
+                    PD::drawBitmap(x, y, Images::Card_Back);
+                }
+                else {
+                    Card card = this->deck.getCard(DeckTypes::Discard, i);
+                    this->renderCard(x, y, card, false, true);
+                }
+
             }
             
             x = x + 2;

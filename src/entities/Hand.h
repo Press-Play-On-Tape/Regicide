@@ -246,10 +246,6 @@ struct Hand {
                             cardsSelected[card.getNumber()]++;
                             break;
 
-                        case Cards::Joker:
-                            cardsSelected[13]++;
-                            break;
-
                     }
 
                 }

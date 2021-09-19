@@ -67,6 +67,7 @@ namespace Images {
     #include "captions/CardAddedToDiscard.h"
     #include "captions/CardAddedToHand.h"
     #include "captions/CardAddedToTavern.h"
+    #include "captions/CardsAddedToTavern.h"
     #include "captions/YouDied.h"
     #include "captions/YouSurvived.h"
     #include "captions/YouSurvivedThisRound.h"
@@ -132,6 +133,7 @@ namespace Images {
         CardAddedToDiscard,
         CardAddedToHand,
         CardAddedToTavern,
+        CardsAddedToTavern,
         YouDied,
         YouSurvived,
         YouSurvivedThisRound,

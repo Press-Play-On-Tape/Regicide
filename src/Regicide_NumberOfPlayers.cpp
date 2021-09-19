@@ -18,7 +18,7 @@ void Game::numberOfPlayers_Init() {
 //
 void Game::numberOfPlayers() { 
 
-    if (PC::buttons.pressed(BTN_UP) && this->gamePlay.getNumberOfPlayers() < 4) { 
+    if (PC::buttons.pressed(BTN_UP) && this->gamePlay.getNumberOfPlayers() < 2) { 
 
         this->gamePlay.setNumberOfPlayers(this->gamePlay.getNumberOfPlayers() + 1);
 
