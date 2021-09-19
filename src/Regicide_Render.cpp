@@ -5,333 +5,304 @@ using PC = Pokitto::Core;
 using PD = Pokitto::Display;
 
 
-void Game::renderCard_Blank(int16_t x, int16_t y) { 
+// ---------------------------------------------------------------------------------------------------------------
+// Render screen
+// ---------------------------------------------------------------------------------------------------------------
 
-    PD::drawBitmap(x, y, Images::Card_Front_Normal_Half);
+void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastleDeckTopCard) {
 
-}
 
-void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool logo) { 
+    PD::fillScreen(3);
 
-    PD::drawBitmap(x, y, highlight ? Images::Card_Front_Highlight : Images::Card_Front_Normal);
 
-    PD::setColor(0, 14);
+    // Upper decks ..
 
-    switch (card.getNumber() % 13) {
+    PD::drawBitmap(9, 1, Images::Banner_Castle);
+    this->renderCastleDeck(10, 11, this->deck.getIndex(DeckTypes::Castle) + 1, displayCastleDeckTopCard);
 
-        case 0:    
-            PD::setCursor(x + 5, y + 4);
-            PD::print("A");
-            PD::drawBitmap(x + 28, y + 60, Images::LargeNumbers_Inverted[0]);
-            PD::drawBitmap(x + 28, y + 48, Images::Suits_Coloured_Rot[static_cast<uint8_t>(card.getSuit())]);
-            if (logo) PD::drawBitmap(x + 8, y + 23, Images::Logo);
-            break;
+    PD::drawBitmap(84, 1, Images::Banner_Discard);
+    this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1, this->gamePlay.getHeartsCounter() == 0);
 
-        case 1 ... 8:    
-            PD::setCursor(x + 5, y + 4);
-            PD::print(static_cast<uint16_t>((card.getNumber() % 13) + 1));
-            PD::drawBitmap(x + 28, y + 60, Images::LargeNumbers_Inverted[(card.getNumber() % 13) + 1]);
-            PD::drawBitmap(x + 28, y + 48, Images::Suits_Coloured_Rot[static_cast<uint8_t>(card.getSuit())]);
-            if (logo) PD::drawBitmap(x + 8, y + 23, Images::Logo);
-            break;
-
-        case 9:    
-            PD::setCursor(x + 2, y + 4);
-            PD::print("1");
-            PD::setCursor(x + 7, y + 4);
-            PD::print("0");
-            PD::drawBitmap(x + 28, y + 60, Images::LargeNumbers_Inverted[10]);
-            PD::drawBitmap(x + 28, y + 48, Images::Suits_Coloured_Rot[static_cast<uint8_t>(card.getSuit())]);
-            if (logo) PD::drawBitmap(x + 8, y + 23, Images::Logo);
-            break;
-
-        case 10:    
-            PD::setCursor(x + 4, y + 4);
-            PD::print("J");
-            PD::drawBitmap(x + 4, y + 7, Images::Jacks[static_cast<uint8_t>(card.getSuit())]);
-            break;
-
-        case 11:    
-            PD::setCursor(x + 4, y + 4);
-            PD::print("Q");
-            PD::drawBitmap(x + 4, y + 7, Images::Queens[static_cast<uint8_t>(card.getSuit())]);
-            break;
-
-        case 12:    
-            PD::setCursor(x + 4, y + 4);
-            PD::print("K");
-            PD::drawBitmap(x + 4, y + 7, Images::Kings[static_cast<uint8_t>(card.getSuit())]);
-            break;
-
-
-    }
-
-    PD::drawBitmap(x + 3, y + 14, Images::Suits_Coloured[static_cast<uint8_t>(card.getSuit())]);
-
-
-}
-
-
-void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selectedIndex, uint8_t cardsToSuppress) { 
-
-    uint8_t spacing = 18;
-    uint8_t offset = 0;
-    bool drawSpacer = false;
-
-    switch (this->hands[playerIdx].getCardIndex() - cardsToSuppress + 1) {
-
-        case 1:
-            offset = 72 - Constants::CardWidth_Half;
-            break;
-
-        case 2:
-            offset = 72 - (Constants::CardWidth_Half + 9);
-            break;
-
-        case 3:
-            offset = 72 - (Constants::CardWidth_Half + 18);
-            break;
-
-        case 4:
-            offset = 72 - (Constants::CardWidth_Half + 27);
-            break;
-
-        case 5:
-            offset = 72 - (Constants::CardWidth_Half + 36);
-            break;
-
-        case 6:
-            offset = 72 - (Constants::CardWidth_Half + 45);
-            break;
-
-        case 7:
-            offset = 2;
-            spacing = 17;
-            break;
-
-        case 8:
-            offset = 0;
-            spacing = 15;
-            break;
-
-        case 9:
-            offset = 0;
-            spacing = 13;
-            drawSpacer = true;
-            break;
-
-        case 10:
-            offset = 0;
-            spacing = 13;
-            drawSpacer = true;
-            break;
-
-        case 11:
-            offset = 0;
-            spacing = 13;
-            drawSpacer = true;
-            break;
-
-
-    }
-
-    for (uint8_t i = 0; i <= this->hands[playerIdx].getCardIndex() - cardsToSuppress; i++) {
-
-        Card card = this->hands[playerIdx].getCard(i);
-        bool marked = this->hands[playerIdx].isMarked(i);
-
-        this->renderCard(x + offset, y - (marked ? 10 : 0), card, i == selectedIndex, false);
-        x = x + spacing;
-
-    }
-
-    if (drawSpacer) {
-        PD::setColor(3);
-        PD::drawFastVLine(146, 140, 40);
-    }
-
-}
-
-
-void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard) { 
-
-    uint8_t endCard = this->deck.getIndex(DeckTypes::Castle);
-    uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
-
-
-    if (endCard == 0) {
-
-        PD::drawBitmap(x + 2, y, Images::Card_Placeholder);
-        x = x + 3;
-
-    }
-    else {
-
-        for (uint8_t i = startCard; i <= endCard; i++) {
-
-            if (i < endCard) {
-                this->renderCard_Blank(x, y);
-            }
-            else if (!displayTopCard) {
-                PD::drawBitmap(x, y, Images::Card_Back);
-            }
-            else {
-                Card card = this->deck.getCard(DeckTypes::Castle, i);
-                this->renderCard(x, y, card, false, false);
-            }
-            
-            x = x + 2;
-
-        }
-
-    }
-
-    this->renderCardCount(x, y, numberOfCards);
-
-}
-
-
-void Game::renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards) { 
-
-    uint8_t endCard = this->deck.getIndex(DeckTypes::Tavern);
-    uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
-
-    if (endCard == 0) {
-
-        PD::drawBitmap(x + 2, y, Images::Card_Placeholder);
-        x = x + 3;
-
-    }
-    else {
-
-        for (uint8_t i = startCard; i <= endCard; i++) {
-
-            PD::drawBitmap(x, y, Images::Card_Back);
-            x = x + 2;
-
-        }
-
-    }
-
-    this->renderCardCount(x, y, numberOfCards);
-
-}
-
-void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard) { 
-
-    int8_t endCard = this->deck.getIndex(DeckTypes::Discard) + 1;
-    uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
-
-    if (endCard == 0) {
-
-        PD::drawBitmap(x + 2, y, Images::Card_Placeholder);
-        x = x + 3;
-
-    }
-    else {
-
-        for (uint8_t i = startCard; i < endCard; i++) {
-
-            if (i < endCard - 1) {
-                this->renderCard_Blank(x, y);
-            }
-            else {
-
-                if (!displayTopCard) {
-                    PD::drawBitmap(x, y, Images::Card_Back);
-                }
-                else {
-                    Card card = this->deck.getCard(DeckTypes::Discard, i);
-                    this->renderCard(x, y, card, false, true);
-                }
-
-            }
-            
-            x = x + 2;
-
-        }
-
-    }
-
-    this->renderCardCount(x, y, numberOfCards);
-
-}
-
-void Game::renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards) {
-
-    PD::drawBitmap(x + 32, y + 66, Images::Counter);
-    x = x + 39;
+    uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
+    PD::drawBitmap(11, 89, Images::AttackHealth);
 
     {
         uint8_t digits[3] = {};
+        uint8_t x = 51;
 
-        extractDigits(digits, numberOfCards);
+        extractDigits(digits, attack);
 
         for (uint8_t i = 0; i < 2; ++i) {
-            PD::drawBitmap(x, y + 68, Images::SmallNumbers[digits[i]]);
+            PD::drawBitmap(x, 89, Images::MediumNumbers[digits[i]]);
             x = x - 5;
         }
 
+        x = 51;
+        extractDigits(digits, currentEnemy.getHealth());
+
+        for (uint8_t i = 0; i < 2; ++i) {
+            PD::drawBitmap(x, 98, Images::MediumNumbers[digits[i]]);
+            x = x - 5;
+        }
+
+    }    
+
+
+
+
+    // Player hand ..
+
+    PD::setCursor(0, 110);
+    PD::setColor(1, 14);
+
+    switch (this->gameState) {
+
+        case GameState::Game_Step1_Play:
+        case GameState::Game_Step4_SufferDamage:
+            this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, this->gamePlay.getCardCursor(), currentHand.getCardsAdded());
+            break;
+            
+        case GameState::Game_Step2_Activate:
+            if (this->gamePlay.getDiamondsCounter() == 0) {
+                this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, Constants::NoSelection, currentHand.getCardsAdded());
+            }
+            break;
+
+        default:
+            this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, Constants::NoSelection, currentHand.getCardsAdded());
+            break;
+
     }
 
-}
 
-void Game::renderAttackButton(ButtonState state) {
+    // Player number (two players only) ..
 
-    PD::drawBitmap(152, 151, Images::Buttons_Attack[static_cast<uint8_t>(state)]);
-
-
-}
-
-void Game::renderYieldButton(ButtonState state) {
-
-    PD::drawBitmap(152, 164, Images::Buttons_Yield[static_cast<uint8_t>(state)]);
-
-}
-
-void Game::renderLegend(Hand &currentHand) {
-
-    PD::drawBitmap(151, 105, Images::LegendPanel);
-
-    uint8_t selected = currentHand.getMarkedSuit(CardSuit::Hearts);
-    PD::drawBitmap(158, 109, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Hearts)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Hearts)]);
-    PD::drawBitmap(170, 110, selected ? Images::Legend_Heal_Highlight : Images::Legend_Heal_Grey);
-
-    selected = currentHand.getMarkedSuit(CardSuit::Diamonds);
-    PD::drawBitmap(158, 119, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Diamonds)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Diamonds)]);
-    PD::drawBitmap(170, 120, selected ? Images::Legend_Draw_Highlight : Images::Legend_Draw_Grey);
-
-    selected = currentHand.getMarkedSuit(CardSuit::Clubs);
-    PD::drawBitmap(158, 129, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Clubs)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Clubs)]);
-    PD::drawBitmap(170, 130, selected ? Images::Legend_Damage_Highlight : Images::Legend_Damage_Grey);
-
-    selected = currentHand.getMarkedSuit(CardSuit::Spades) || this->deck.getShield();
-    PD::drawBitmap(158, 139, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Spades)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Spades)]);
-    PD::drawBitmap(170, 140, selected ? Images::Legend_Shield_Highlight : Images::Legend_Shield_Grey);
-
-}
-
-void Game::renderCaption(Caption caption) {
-
-    this->renderCaption(caption, Caption::None);
-
-}
-
-void Game::renderCaption(Caption caption1, Caption caption2) {
-
-    PD::setColor(0);
-
-    if (caption2 == Caption::None) {
-        PD::fillRect(1, 116, 145, 8);
-    }
-    else {
-        PD::fillRect(1, 116, 145, 18);
+    if (this->gamePlay.getNumberOfPlayers() > 1) {
+        PD::drawBitmap(1, 166, Images::Player);
+        PD::drawBitmap(35, 167, Images::MediumNumbers[this->gamePlay.getCurrentPlayer() + 1]);
     }
 
-    PD::drawBitmap(2, 117, Images::Captions[static_cast<uint8_t>(caption1)]);
 
-    if (caption2 != Caption::None) {
-        PD::drawBitmap(2, 127, Images::Captions[static_cast<uint8_t>(caption2)]);
+    // Render background ..
+
+    for (uint8_t y = 0; y < 176; y = y + 32) {
+
+        PD::drawBitmap(147, y, Images::RightSidePanel);
+
+    }
+
+    PD::drawBitmap(159, 1, Images::Banner_Tavern);
+    this->renderTavernDeck(160, 11, this->deck.getIndex(DeckTypes::Tavern) + 1);
+
+
+
+    // If the players is at risk of dying, flash the health ..
+
+    attack = currentHand.getAttackValue(false);
+    if (currentHand.getHealth() < currentEnemy.getAttack() && this->gameState == GameState::Game_Step1_Play && PC::frameCount % 32 < 16) {
+
+        PD::setColor(8);
+        PD::fillRect(159, 96, 49, 7);
+
+    }
+
+    PD::drawBitmap(162, 88, Images::AttackHealth);
+
+    {
+        uint8_t digits[3] = {};
+        uint8_t x = 202;
+
+        extractDigits(digits, attack);
+
+        for (uint8_t i = 0; i < 2; ++i) {
+            PD::drawBitmap(x, 88, Images::MediumNumbers[digits[i]]);
+            x = x - 5;
+        }
+
+        x = 202;
+        extractDigits(digits, currentHand.getHealth());
+
+        for (uint8_t i = 0; i < 2; ++i) {
+            PD::drawBitmap(x, 97, Images::MediumNumbers[digits[i]]);
+            x = x - 5;
+        }
+
+    }    
+
+    this->renderLegend(currentHand);
+
+    switch (this->gameState) {
+
+        case GameState::Game_Step0_AddCards:
+            this->renderCaption(Caption::CardAddedToYourHand);
+            this->renderAttackButton(ButtonState::Disabled);
+            this->renderYieldButton(ButtonState::Disabled);
+
+            break;
+
+
+        // ---------------------------------------------------------------------------------------------------------
+
+        case GameState::Game_Step1_Play:
+
+            this->renderCaption(Caption::AttackOrYield);
+            this->renderAttackButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Attack ? ButtonState::Highlighted : (currentHand.isValidAttack() ? ButtonState::Enabled : ButtonState::Disabled));
+            this->renderYieldButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Yield ? ButtonState::Highlighted : ButtonState::Enabled);
+
+            break;
+
+
+        // ---------------------------------------------------------------------------------------------------------
+
+        case GameState::Game_Step2_Activate:
+
+            if (this->gamePlay.getHeartsCounter() > 0) {
+
+                PD::drawBitmap(168 - (this->gamePlay.getHeartsCounter() * 4), 11, Images::Card_Back);
+                this->renderCaption(Caption::CardsAddedToTavern);
+
+            }
+
+            if (this->gamePlay.getHeartsCounter() == 0 && this->gamePlay.getDiamondsCounter() > 0) {
+
+                PD::drawBitmap(70 + (this->gamePlay.getDiamondsCounter() * 4), 140 - (this->gamePlay.getDiamondsCounter() * 6), Images::Card_Back);
+                this->renderCaption(Caption::CardAddedToYourHand);
+
+                this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, Constants::NoSelection, currentHand.getCardsAdded());
+
+            }
+
+            this->renderAttackButton(ButtonState::Disabled);
+            this->renderYieldButton(ButtonState::Disabled);
+
+            break;
+
+
+        // ---------------------------------------------------------------------------------------------------------
+
+        case GameState::Game_Step3_DealDamage:
+            {        
+                uint8_t attack = currentHand.getAttackValue();
+                Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
+
+                if (this->gamePlay.getCounter() > 0) {
+
+                    this->renderCaption(Caption::AttackingTheEnemy);
+
+                    for (uint8_t i = 0; i < Constants::AttackMax; i++) {
+
+                        if (this->attacks.getAttack(i).getIndex() > 0) {
+
+                            Attack &attack = this->attacks.getAttack(i);
+                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Explosion[attack.getIndex() / (Constants::AttackLength / 7)]);
+
+                        }
+
+                    }
+
+                }
+                else {
+
+                    if (attack == currentEnemy.getHealth()) {
+                        this->renderCaption(Caption::EnemyDefeated, Caption::CardAddedToTavern);
+                    }
+                    else if (attack > currentEnemy.getHealth()) {
+                        this->renderCaption(Caption::EnemyDefeated, Caption::CardAddedToDiscard);
+                    }
+                    else {
+                        this->renderCaption(Caption::EnemyAttacked);
+                    }
+
+                }
+
+            }
+
+            this->renderAttackButton(ButtonState::Disabled);
+            this->renderYieldButton(ButtonState::Disabled);
+
+            break;
+
+
+        // ---------------------------------------------------------------------------------------------------------
+
+        case GameState::Game_Step4_SufferDamage:
+            {        
+                PD::setColor(2, 14);
+                PD::setCursor(0, 120);
+
+                //Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
+                uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
+
+                switch (this->gamePlay.getCounter()) {
+
+                    case 0:
+                        {
+                            this->renderCaption(Caption::YouSurvivedThisRound, Caption::DiscardPoints);
+
+                            uint8_t digits[3] = {};
+                            uint8_t x = 46;
+
+                            extractDigits(digits, this->gamePlay.getHealthToDiscard());
+
+                            for (uint8_t i = 0; i < 2; ++i) {
+                                PD::drawBitmap(x, 127, Images::MediumNumbers[digits[i]]);
+                                x = x - 5;
+                            }
+
+                        }  
+
+                        break;
+
+                    default:
+
+                        switch (this->gamePlay.getHealthToDiscard()) {
+
+                            case 0:
+                                this->renderCaption(Caption::YouSurvivedThisRound);
+                                break;
+
+                            default:
+                                this->renderCaption(Caption::YouDied);
+                                break;
+
+                        }
+
+                }
+
+            }
+
+            this->renderAttackButton(ButtonState::Disabled);
+            this->renderYieldButton(ButtonState::Disabled);
+
+            break;
+
+
+        // ---------------------------------------------------------------------------------------------------------
+
+        case GameState::Game_Step5_EnemyDead:
+            this->renderCaption(Caption::EnemyDefeated);
+            break;
+
+
+        // ---------------------------------------------------------------------------------------------------------
+
+        case GameState::Game_Over:
+            this->renderCaption(Caption::YouDied);
+            PD::setColor(8);
+            PD::fillRect(0, 0, 220, 176 - this->gamePlay.getCounter());
+            PD::drawBitmap(0, 176 - this->gamePlay.getCounter(), Images::Blood);
+            PD::drawBitmap(41, 64 - this->gamePlay.getCounter(), Images::YouDiedText);
+            break;
+
+
+        // ---------------------------------------------------------------------------------------------------------
+
+        default:
+
+            this->renderAttackButton(ButtonState::Disabled);
+            this->renderYieldButton(ButtonState::Disabled);
+            break;
+
     }
 
 }

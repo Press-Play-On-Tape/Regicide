@@ -33,10 +33,22 @@ void Game::winner() {
 
     // Render page ..
 
-    PD::fillScreen(3);
-    
-    PD::setCursor(7, 14);
-    PD::setColor(6);
-    PD::print("You Win!");
+    PD::drawBitmap(0, 0, Images::Background);
+
+    uint16_t frameCount = PC::frameCount % 96;
+
+    switch (frameCount) {
+
+        case 0 ... 9:
+            PD::drawBitmap(24, 1, Images::Title_01_Highlight[frameCount / 2]);
+            break;
+
+        default:
+            PD::drawBitmap(24, 1, Images::Title_01);
+            break;
+
+    }
+
+    PD::drawBitmap(25, 85, Images::Winner);
 
 }

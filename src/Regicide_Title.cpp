@@ -34,7 +34,21 @@ void Game::title() {
     // Render page ..
 
     PD::drawBitmap(0, 0, Images::Background);
-    PD::drawBitmap(24, 1, Images::Title_01);
-    PD::drawBitmap(27, 84, Images::Title_02);
+    PD::drawBitmap(27, 83, Images::Title_02);
+
+
+    uint16_t frameCount = PC::frameCount % 96;
+
+    switch (frameCount) {
+
+        case 0 ... 9:
+            PD::drawBitmap(24, 1, Images::Title_01_Highlight[frameCount / 2]);
+            break;
+
+        default:
+            PD::drawBitmap(24, 1, Images::Title_01);
+            break;
+
+    }
 
 }

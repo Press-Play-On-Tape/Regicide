@@ -25,14 +25,6 @@ class Game {
         Hand hands[4];
         Attacks attacks;
 
-        uint16_t dealCounter = 0;
-        uint8_t cardCursor = 0;
-
-        uint8_t heartsCounter = 0;
-        uint8_t diamondsCounter = 0;
-
-
-
     public:
 
         void setup(GameCookie *cookie);
@@ -47,8 +39,6 @@ class Game {
         void title();
         void numberOfPlayers_Init();
         void numberOfPlayers();
-        void gameOver_Init();
-        void gameOver();
         void winner_Init();
         void winner();
         void gameSwapPlayers_Init();
@@ -59,7 +49,7 @@ class Game {
         void muteTheme();
         void playSoundEffect(SoundEffect soundEffect);
         
-        void renderCard_Blank(int16_t x, int16_t y);
+        void renderCard_Side(int16_t x, int16_t y);
         void renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool logo);
         void renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selecteIndex, uint8_t cardsToSuppress);
         void renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
@@ -71,6 +61,7 @@ class Game {
         void renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards);
         void renderCaption(Caption caption1);
         void renderCaption(Caption caption1, Caption caption2);
+        void renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastleDeckTopCard);
 
 };
 

@@ -166,17 +166,17 @@ struct Deck {
                     break;
 
                 case DeckTypes::Tavern:
-printf("About to add ");
-card.print();                
-printf(" to tavern\n");
+// printf("About to add ");
+// card.print();                
+// printf(" to tavern\n");
                     this->tavernDeckIndex++;
                     this->tavernDeck[this->tavernDeckIndex].init(card.getCardIndex());
                     break;
 
                 case DeckTypes::Discard:
-printf("About to add ");
-card.print();                
-printf(" to discard\n");
+// printf("About to add ");
+// card.print();                
+// printf(" to discard\n");
                     this->discardDeckIndex++;
                     this->discardDeck[this->discardDeckIndex].init(card.getCardIndex());
                     break;

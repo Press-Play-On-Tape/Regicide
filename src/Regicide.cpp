@@ -53,6 +53,7 @@ void Game::loop() {
         case GameState::Game_Step3_DealDamage:
         case GameState::Game_Step4_SufferDamage:
         case GameState::Game_Step5_EnemyDead:
+        case GameState::Game_Over:
             this->game();
             break;
 
@@ -63,15 +64,6 @@ void Game::loop() {
 
         case GameState::Game_SwapPlayers:
             this->gameSwapPlayers();
-            break;
-
-        case GameState::GameOver_Init:
-            this->gameOver_Init();
-            this->gameOver();
-            break;
-
-        case GameState::GameOver:
-            this->gameOver();
             break;
 
         case GameState::Winner_Init:

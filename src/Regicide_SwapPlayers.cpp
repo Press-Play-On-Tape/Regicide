@@ -29,7 +29,7 @@ void Game::gameSwapPlayers() {
         Hand &currentHand = this->hands[currentPlayer];
 
         if (currentHand.getCardsAdded() > 0) {
-            dealCounter = (Constants::DealDelay * currentHand.getCardsAdded()) + (Constants::DealDelay - 2);
+            this->gamePlay.setCounter((Constants::DealDelay * currentHand.getCardsAdded()) + (Constants::DealDelay - 2));
             this->gameState = GameState::Game_Step0_AddCards;
         }
         else {
@@ -42,7 +42,21 @@ void Game::gameSwapPlayers() {
     // Render page ..
 
     PD::drawBitmap(0, 0, Images::Background);
-    PD::drawBitmap(24, 1, Images::Title_01);
-    PD::drawBitmap(25, 85, Images::SwapPlayers);
 
+    uint16_t frameCount = PC::frameCount % 96;
+
+    switch (frameCount) {
+
+        case 0 ... 9:
+            PD::drawBitmap(24, 1, Images::Title_01_Highlight[frameCount / 2]);
+            break;
+
+        default:
+            PD::drawBitmap(24, 1, Images::Title_01);
+            break;
+
+    }
+
+    PD::drawBitmap(25, 85, Images::SwapPlayers);
+    
 }

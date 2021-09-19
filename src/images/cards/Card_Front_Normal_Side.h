@@ -2,7 +2,7 @@
 
 #pragma once
 
-inline constexpr uint8_t Card_Front_Normal_Half[] = {
+inline constexpr uint8_t Card_Front_Normal_Side[] = {
 6, 70,
 0xee,0xe6,0x66,
 0xee,0x67,0x77,

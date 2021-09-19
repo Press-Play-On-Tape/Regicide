@@ -28,6 +28,8 @@ namespace Constants {
     constexpr uint8_t AttackLength = 7 * 3;
     constexpr uint8_t AttackInterval = 15;
 
+    constexpr uint8_t GameOver_Delay = 176 + 72;
+
 }
 
 enum class GameMode : uint8_t {
@@ -53,8 +55,7 @@ enum class GameState : uint8_t {
     Game_Step5_EnemyDead,
     Game_SwapPlayers_Init,
     Game_SwapPlayers,
-    GameOver_Init,
-    GameOver,
+    Game_Over,
     Winner_Init,
     Winner,
 };

@@ -44,7 +44,7 @@ void Game::numberOfPlayers() {
 
     PD::drawBitmap(0, 0, Images::Background);
     PD::drawBitmap(24, 1, Images::Title_01);
-    PD::drawBitmap(49, 85, Images::NumberOfPlayers_Digits[this->gamePlay.getNumberOfPlayers() - 1]);
-    PD::drawBitmap(78, 84, Images::NumberOfPlayers);
+    PD::drawBitmap(56, 86, Images::NumberOfPlayers_Digits[this->gamePlay.getNumberOfPlayers() - 1]);
+    PD::drawBitmap(73, 84, Images::NumberOfPlayers);
 
 }
