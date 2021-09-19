@@ -50,7 +50,8 @@ void Game::loop() {
         case GameState::Game_Step0_AddCards:
         case GameState::Game_Step1_Play:
         case GameState::Game_Step2_Activate:
-        case GameState::Game_Step3_DealDamage:
+        case GameState::Game_Step3_DealDamage_Init:
+        case GameState::Game_Step3_DealDamage_DeadEnemy:
         case GameState::Game_Step4_SufferDamage:
         case GameState::Game_Step5_EnemyDead:
         case GameState::Game_Over:

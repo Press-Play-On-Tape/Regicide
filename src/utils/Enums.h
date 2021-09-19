@@ -1,7 +1,7 @@
 #pragma once
 
 #define DEBUG
-#define _SOUNDS
+#define SOUNDS
 #define COOKIE_INITIALISED 42
 
 namespace Cards {
@@ -50,7 +50,8 @@ enum class GameState : uint8_t {
     Game_Step0_AddCards,
     Game_Step1_Play,
     Game_Step2_Activate,
-    Game_Step3_DealDamage,
+    Game_Step3_DealDamage_Init,
+    Game_Step3_DealDamage_DeadEnemy,
     Game_Step4_SufferDamage,
     Game_Step5_EnemyDead,
     Game_SwapPlayers_Init,
@@ -113,3 +114,37 @@ enum class EnemyKilledType : uint8_t {
     Tavern,
     Discard,
 };
+
+enum class SoundEffects : uint8_t {
+    Both,
+    Music,
+    SFX,
+    None
+};
+
+inline SoundEffects &operator++(SoundEffects &c ) {
+    c = static_cast<SoundEffects>( (static_cast<uint8_t>(c) + 1) % 4 );
+    return c;
+}
+
+inline SoundEffects operator++(SoundEffects &c, int ) {
+    SoundEffects result = c;
+    ++c;
+    return result;
+}
+
+inline SoundEffects &operator--(SoundEffects &c ) {
+    if (static_cast<uint8_t>(c) > 0) {
+        c = static_cast<SoundEffects>( (static_cast<uint8_t>(c) - 1) % 4 );
+    }
+    else {
+        c = static_cast<SoundEffects>( 3 );
+    }
+    return c;
+}
+
+inline SoundEffects operator--(SoundEffects &c, int ) {
+    SoundEffects result = c;
+    --c;
+    return result;
+}

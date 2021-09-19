@@ -30,7 +30,7 @@
 
 // Limit the framerate so the game doesn't run too fast
 // Optional. Default is 30.
-#define PROJ_FPS 60
+#define PROJ_FPS 30
 
 
 // Choose how to use Pokitto's "extra" 4kb of RAM.
@@ -71,7 +71,7 @@
 // A higher rate sounds better but takes up more CPU
 // and Flash space.
 // Optional. Default is 22050.
-#define PROJ_AUD_FREQ 11025
+#define PROJ_AUD_FREQ 8000
 
 
 // Automatically restart streaming music when it ends.

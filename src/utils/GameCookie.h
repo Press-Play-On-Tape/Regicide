@@ -13,12 +13,15 @@ class GameCookie : public Pokitto::Cookie {
 		// uint8_t levelCurrent = 0;
 		// uint8_t levelMax = 0;
 		// uint8_t levelRating[200];
+		SoundEffects sfx = SoundEffects::Both;
 
 	public:
 
 		void initialise() {
 
 			this->initialised = COOKIE_INITIALISED;
+			this->sfx = SoundEffects::Both;
+
 			
 			// for (uint8_t i = 0; i < 200; i++) {
 			// 	levelRating[i] = 0;

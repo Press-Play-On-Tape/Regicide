@@ -19,11 +19,16 @@ class Game {
 
         SplashScreenVariables splashScreenVariables;
         GameState gameState = GameState::Splash;
+        GameState nextGameState;
         GamePlay gamePlay;
         GameCookie *cookie;
         Deck deck;
         Hand hands[4];
         Attacks attacks;
+        EnemyKilledType enemyKilled = EnemyKilledType::None;
+        uint8_t nextCounter = 0;
+        
+        File mainThemeFile;      
 
     public:
 
@@ -44,6 +49,7 @@ class Game {
         void gameSwapPlayers_Init();
         void gameSwapPlayers();
         bool changeAttackers(Card& currentEnemy);
+        void discardPlayersCards(Hand &currentHand);
 
         void playTheme();
         void muteTheme();
@@ -52,7 +58,7 @@ class Game {
         void renderCard_Side(int16_t x, int16_t y);
         void renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool logo);
         void renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selecteIndex, uint8_t cardsToSuppress);
-        void renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
+        void renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard, bool shakeTopCard);
         void renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards);
         void renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
         void renderAttackButton(ButtonState state);
@@ -61,7 +67,7 @@ class Game {
         void renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards);
         void renderCaption(Caption caption1);
         void renderCaption(Caption caption1, Caption caption2);
-        void renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastleDeckTopCard);
+        void renderScreen(Hand &currentHand, Card &currentEnemy);
 
 };
 

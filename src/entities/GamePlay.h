@@ -17,30 +17,39 @@ struct GamePlay {
         uint16_t counter = 0;
         uint8_t heartsCounter = 0;
         uint8_t diamondsCounter = 0;
+        uint8_t enemyDiscardCounter = 0;
+        uint8_t enemyTavernCounter = 0;
 
+        Card prevEnemy;
 
         bool thisEnemy_suits[4];
 
 
     public: // Properties
 
-        uint8_t getCurrentPlayer()                  { return this->currentPlayer; }
-        uint8_t getNumberOfPlayers()                { return this->numberOfPlayers; }
-        uint8_t getHealthToDiscard()                { return this->healthToDiscard; }
+        uint8_t getCurrentPlayer()                      { return this->currentPlayer; }
+        uint8_t getNumberOfPlayers()                    { return this->numberOfPlayers; }
+        uint8_t getHealthToDiscard()                    { return this->healthToDiscard; }
 
-        uint16_t getCounter()                       { return this->counter; }
-        uint8_t getHeartsCounter()                  { return this->heartsCounter; }
-        uint8_t getDiamondsCounter()                { return this->diamondsCounter; }
-        uint8_t getCardCursor()                     { return this->cardCursor; }
+        uint16_t getCounter()                           { return this->counter; }
+        uint8_t getHeartsCounter()                      { return this->heartsCounter; }
+        uint8_t getDiamondsCounter()                    { return this->diamondsCounter; }
+        uint8_t getCardCursor()                         { return this->cardCursor; }
+        uint8_t getEnemyDiscardCounter()                { return this->enemyDiscardCounter; }
+        uint8_t getEnemyTavernCounter()                 { return this->enemyTavernCounter; }
+        Card& getPreviousEnemy()                        { return this->prevEnemy; }
 
-        void setCurrentPlayer(uint8_t val)          { this->currentPlayer = val; }
-        void setNumberOfPlayers(uint8_t val)        { this->numberOfPlayers = val; }
-        void setHealthToDiscard(uint8_t val)        { this->healthToDiscard = val; }
+        void setCurrentPlayer(uint8_t val)              { this->currentPlayer = val; }
+        void setNumberOfPlayers(uint8_t val)            { this->numberOfPlayers = val; }
+        void setHealthToDiscard(uint8_t val)            { this->healthToDiscard = val; }
 
-        void setCounter(uint16_t val)               { this->counter = val; }
-        void setHeartsCounter(uint8_t val)          { this->heartsCounter = val; }
-        void setDiamondsCounter(uint8_t val)        { this->diamondsCounter = val; }
-        void setCardCursor(uint8_t val)             { this->cardCursor = val; }
+        void setCounter(uint16_t val)                   { this->counter = val; }
+        void setHeartsCounter(uint8_t val)              { this->heartsCounter = val; }
+        void setDiamondsCounter(uint8_t val)            { this->diamondsCounter = val; }
+        void setCardCursor(uint8_t val)                 { this->cardCursor = val; }
+        void setEnemyDiscardCounter(uint8_t val)        { this->enemyDiscardCounter = val; }
+        void setEnemyTavernCounter(uint8_t val)         { this->enemyTavernCounter = val; }
+        void setPreviousEnemy(Card val)                 { this->prevEnemy = val; }
 
     public: // Methods
 
@@ -77,6 +86,18 @@ struct GamePlay {
         void incCardCursor() {
 
             this->cardCursor++;
+
+        }
+
+        void decEnemyDiscardCounter() {
+
+            if (this->enemyDiscardCounter > 0) this->enemyDiscardCounter--;
+
+        }
+
+        void decEnemyTavernCounter() {
+
+            if (this->enemyTavernCounter > 0) this->enemyTavernCounter--;
 
         }
 

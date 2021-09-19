@@ -34,17 +34,20 @@ void Game::winner() {
     // Render page ..
 
     PD::drawBitmap(0, 0, Images::Background);
+    PD::drawBitmap(110, 0, Images::Background, NOROT, FLIPH);
 
     uint16_t frameCount = PC::frameCount % 96;
 
     switch (frameCount) {
 
         case 0 ... 9:
-            PD::drawBitmap(24, 1, Images::Title_01_Highlight[frameCount / 2]);
+            PD::drawBitmap(41, 1, Images::Title_01_Tops[frameCount / 2]);
+            PD::drawBitmap(24, 113, Images::Title_01_Bots[frameCount / 2]);
             break;
 
         default:
-            PD::drawBitmap(24, 1, Images::Title_01);
+            PD::drawBitmap(41, 1, Images::Title_01_Top);
+            PD::drawBitmap(24, 113, Images::Title_01_Bot);
             break;
 
     }

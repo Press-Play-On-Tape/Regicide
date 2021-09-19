@@ -2,12 +2,16 @@
 
 namespace Images {
 
-    #include "title/Title_01.h"
-    #include "title/Title_01_F1.h"
-    #include "title/Title_01_F2.h"
-    #include "title/Title_01_F3.h"
-    #include "title/Title_01_F4.h"
-    #include "title/Title_01_F5.h"
+    #include "title/Title_01_Top.h"
+    #include "title/Title_01_Bot.h"
+    #include "title/Title_01_F1_Top.h"
+    #include "title/Title_01_F2_Top.h"
+    #include "title/Title_01_F2_Bot.h"
+    #include "title/Title_01_F3_Top.h"
+    #include "title/Title_01_F3_Bot.h"
+    #include "title/Title_01_F4_Top.h"
+    #include "title/Title_01_F4_Bot.h"
+    #include "title/Title_01_F5_Bot.h"
 
     #include "title/Title_02.h"
     #include "title/Background.h"
@@ -20,12 +24,20 @@ namespace Images {
     #include "title/NumberOfPlayers_03.h"
     #include "title/NumberOfPlayers_04.h"
 
-    const uint8_t * const Title_01_Highlight[] = { 
-        Title_01_F1,
-        Title_01_F2,
-        Title_01_F3,
-        Title_01_F4,
-        Title_01_F5
+    const uint8_t * const Title_01_Tops[] = { 
+        Title_01_F1_Top,
+        Title_01_F2_Top,
+        Title_01_F3_Top,
+        Title_01_F4_Top,
+        Title_01_Top
+    };
+
+    const uint8_t * const Title_01_Bots[] = { 
+        Title_01_Bot,
+        Title_01_F2_Bot,
+        Title_01_F3_Bot,
+        Title_01_F4_Bot,
+        Title_01_F5_Bot
     };
 
     const uint8_t * const NumberOfPlayers_Digits[] = { 

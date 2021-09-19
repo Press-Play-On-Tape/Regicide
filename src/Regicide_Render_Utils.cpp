@@ -152,11 +152,24 @@ void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t sel
 }
 
 
-void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard) { 
+void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard, bool shakeTopCard) { 
 
     uint8_t endCard = this->deck.getIndex(DeckTypes::Castle);
     uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
 
+    int8_t xOffset = 0;
+    int8_t yOffset = 0;
+    
+    if (shakeTopCard) {
+
+        const int8_t xOffsets[] = { 0, -1, 0, 1 };
+        const int8_t yOffsets[] = { 1, 0, -1, 0 };
+
+        uint8_t frame = PC::frameCount % 4;
+        xOffset = xOffsets[frame];
+        yOffset = yOffsets[frame];
+        
+    }
 
     if (endCard == 0) {
 
@@ -168,15 +181,18 @@ void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool di
 
         for (uint8_t i = startCard; i <= endCard; i++) {
 
-            if (i < endCard) {
+            if (i == endCard - 1 && shakeTopCard) {
+                PD::drawBitmap(x, y, Images::Card_Front_Normal);
+            }
+            else if (i < endCard ) {
                 this->renderCard_Side(x, y);
             }
             else if (!displayTopCard) {
-                PD::drawBitmap(x, y, Images::Card_Back);
+                PD::drawBitmap(x + xOffset, y + yOffset, Images::Card_Back);
             }
             else {
                 Card card = this->deck.getCard(DeckTypes::Castle, i);
-                this->renderCard(x, y, card, false, false);
+                this->renderCard(x + xOffset, y + yOffset, card, false, false);
             }
             
             x = x + 2;

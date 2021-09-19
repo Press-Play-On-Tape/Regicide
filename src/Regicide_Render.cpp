@@ -9,7 +9,7 @@ using PD = Pokitto::Display;
 // Render screen
 // ---------------------------------------------------------------------------------------------------------------
 
-void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastleDeckTopCard) {
+void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
 
 
     PD::fillScreen(3);
@@ -17,18 +17,19 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastl
 
     // Upper decks ..
 
-    PD::drawBitmap(9, 1, Images::Banner_Castle);
-    this->renderCastleDeck(10, 11, this->deck.getIndex(DeckTypes::Castle) + 1, displayCastleDeckTopCard);
+    PD::drawBitmap(12, 1, Images::Banner_Castle);
+    bool shake = (this->gameState == GameState::Game_Step3_DealDamage_Init);
+    this->renderCastleDeck(13, 11, this->deck.getIndex(DeckTypes::Castle) + 1, this->gamePlay.getEnemyDiscardCounter() == 0 && this->gamePlay.getEnemyTavernCounter() == 0, shake);
 
     PD::drawBitmap(84, 1, Images::Banner_Discard);
     this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1, this->gamePlay.getHeartsCounter() == 0);
 
     uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
-    PD::drawBitmap(11, 89, Images::AttackHealth);
+    PD::drawBitmap(14, 89, Images::AttackHealth);
 
     {
         uint8_t digits[3] = {};
-        uint8_t x = 51;
+        uint8_t x = 54;
 
         extractDigits(digits, attack);
 
@@ -37,7 +38,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastl
             x = x - 5;
         }
 
-        x = 51;
+        x = 54;
         extractDigits(digits, currentEnemy.getHealth());
 
         for (uint8_t i = 0; i < 2; ++i) {
@@ -62,6 +63,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastl
             this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, this->gamePlay.getCardCursor(), currentHand.getCardsAdded());
             break;
             
+        case GameState::Game_Step0_AddCards:
         case GameState::Game_Step2_Activate:
             if (this->gamePlay.getDiamondsCounter() == 0) {
                 this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, Constants::NoSelection, currentHand.getCardsAdded());
@@ -134,7 +136,16 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastl
     switch (this->gameState) {
 
         case GameState::Game_Step0_AddCards:
+            
             this->renderCaption(Caption::CardAddedToYourHand);
+
+            if (this->gamePlay.getDiamondsCounter() > 0) {
+
+                PD::drawBitmap(70 + (this->gamePlay.getDiamondsCounter() * 8), 140 - (this->gamePlay.getDiamondsCounter() * 12), Images::Card_Back);
+                this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, Constants::NoSelection, currentHand.getCardsAdded());
+
+            }
+
             this->renderAttackButton(ButtonState::Disabled);
             this->renderYieldButton(ButtonState::Disabled);
 
@@ -165,7 +176,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastl
 
             if (this->gamePlay.getHeartsCounter() == 0 && this->gamePlay.getDiamondsCounter() > 0) {
 
-                PD::drawBitmap(70 + (this->gamePlay.getDiamondsCounter() * 4), 140 - (this->gamePlay.getDiamondsCounter() * 6), Images::Card_Back);
+                PD::drawBitmap(70 + (this->gamePlay.getDiamondsCounter() * 8), 140 - (this->gamePlay.getDiamondsCounter() * 12), Images::Card_Back);
                 this->renderCaption(Caption::CardAddedToYourHand);
 
                 this->renderPlayerHand(this->gamePlay.getCurrentPlayer(), 1, 140, Constants::NoSelection, currentHand.getCardsAdded());
@@ -180,7 +191,8 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastl
 
         // ---------------------------------------------------------------------------------------------------------
 
-        case GameState::Game_Step3_DealDamage:
+        case GameState::Game_Step3_DealDamage_Init:
+        case GameState::Game_Step3_DealDamage_DeadEnemy:
             {        
                 uint8_t attack = currentHand.getAttackValue();
                 Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
@@ -202,6 +214,18 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy, bool displayCastl
 
                 }
                 else {
+
+                    if (this->gamePlay.getEnemyDiscardCounter() > 0) {
+
+                        this->renderCard(90 - (this->gamePlay.getEnemyDiscardCounter() * 4), 11, this->gamePlay.getPreviousEnemy(), false, false);
+
+                    }
+
+                    if (this->gamePlay.getEnemyTavernCounter() > 0) {
+
+                        this->renderCard(173 - (this->gamePlay.getEnemyTavernCounter() * 8), 11, this->gamePlay.getPreviousEnemy(), false, false);
+
+                    }
 
                     if (attack == currentEnemy.getHealth()) {
                         this->renderCaption(Caption::EnemyDefeated, Caption::CardAddedToTavern);

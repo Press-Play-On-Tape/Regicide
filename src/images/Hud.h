@@ -59,6 +59,9 @@ namespace Images {
     #include "hud/Legend_Shield_Grey.h"
     #include "hud/Legend_Shield_Highlight.h"
 
+    #include "hud/Arrow_Left.h"
+    #include "hud/Arrow_Right.h"
+
     #include "captions/AttackingTheEnemy.h"
     #include "captions/AttackOrYield.h"
     #include "captions/DiscardPoints.h"
