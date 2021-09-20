@@ -7,6 +7,7 @@
 #include "images/Images.h"
 #include "utils/Enums.h"
 #include "utils/GameCookie.h"
+#include "music/Music.h"
 
 using PC=Pokitto::Core;
 using PD=Pokitto::Display;
@@ -52,7 +53,7 @@ class Game {
         void discardPlayersCards(Hand &currentHand);
         bool setCardCursor(Hand &currentHand);
 
-        void playTheme();
+        void playTheme(Themes theme);
         void muteTheme();
         void playSoundEffect(SoundEffect soundEffect);
         

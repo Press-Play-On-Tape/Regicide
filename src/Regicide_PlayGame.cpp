@@ -12,8 +12,8 @@ using PD = Pokitto::Display;
 void Game::game_Init() {
 
     this->gameState = GameState::Game_NewHand;
-    this->gamePlay.init(static_cast<GameMode>(this->gamePlay.getNumberOfPlayers()));
-    this->deck.init(static_cast<GameMode>(this->gamePlay.getNumberOfPlayers()));
+    this->gamePlay.init(this->gamePlay.getNumberOfPlayers());
+    this->deck.init(this->gamePlay.getNumberOfPlayers());
 
     this->deck.print();
 
@@ -21,7 +21,7 @@ void Game::game_Init() {
 
     for (uint8_t i = 0; i < 4; i++) {
 
-        this->hands[i].init(i, Constants::MaxNumberOfCards[static_cast<uint8_t>(GameMode::TwoPlayers)]);
+        this->hands[i].init(i, Constants::MaxNumberOfCards[this->gamePlay.getNumberOfPlayers()]);
         
     }
 
@@ -65,6 +65,7 @@ void Game::game() {
                     
                     case Constants::DealDelay * 2:
                     
+                        this->playSoundEffect(SoundEffect::Deal);
                         for (uint8_t i = 0; i < this->gamePlay.getNumberOfPlayers(); i++) {
                             this->deck.dealCard(DeckTypes::Tavern, card);
                             this->hands[i].addCard(card);
@@ -83,6 +84,7 @@ void Game::game() {
                     
                     case Constants::DealDelay * 4:
 
+                        this->playSoundEffect(SoundEffect::Deal);
                         for (uint8_t i = 0; i < this->gamePlay.getNumberOfPlayers(); i++) {
                             this->deck.dealCard(DeckTypes::Tavern,card);
                             this->hands[i].addCard(card);
@@ -91,6 +93,7 @@ void Game::game() {
                         break;
                     
                     case Constants::DealDelay * 5:
+
                         for (uint8_t i = 0; i < this->gamePlay.getNumberOfPlayers(); i++) {
                             this->deck.dealCard(DeckTypes::Tavern,card);
                             this->hands[i].addCard(card);
@@ -99,6 +102,7 @@ void Game::game() {
                     
                     case Constants::DealDelay * 6:
 
+                        this->playSoundEffect(SoundEffect::Deal);
                         for (uint8_t i = 0; i < this->gamePlay.getNumberOfPlayers(); i++) {
                             this->deck.dealCard(DeckTypes::Tavern,card);
                             this->hands[i].addCard(card);
@@ -117,6 +121,7 @@ void Game::game() {
                     
                     case Constants::DealDelay * 8:
                         
+                        this->playSoundEffect(SoundEffect::Deal);
                         for (uint8_t i = 0; i < this->gamePlay.getNumberOfPlayers(); i++) {
                             this->deck.dealCard(DeckTypes::Tavern,card);
                             this->hands[i].addCard(card);
@@ -140,11 +145,11 @@ void Game::game() {
                     case Constants::DealDelay * 10:
 
 
-this->hands[0].getCard(0).init(22);//SJH 10 Spades
+// this->hands[0].getCard(0).init(22);//SJH 10 Spades
 // this->hands[0].getCard(0).init(9);//SJH 10 Clubs
 // this->hands[0].getCard(0).init(32);//SJH Diamond
-this->hands[0].getCard(1).init(17);//SJH 5 Spades
-this->hands[0].getCard(2).init(18);//SJH 6 Spades
+// this->hands[0].getCard(1).init(17);//SJH 5 Spades
+// this->hands[0].getCard(2).init(18);//SJH 6 Spades
 // this->hands[0].getCard(0).init(0);//SJH
 // this->hands[0].getCard(1).init(0);//SJH
 // this->hands[0].getCard(2).init(0);//SJH
@@ -152,7 +157,8 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
 // this->hands[0].getCard(4).init(0);//SJH
 // this->hands[0].getCard(5).init(0);//SJH
 // this->hands[0].getCard(6).init(0);//SJH
-// this->hands[0].getCard(7).init(0);//SJH
+// this->deck.getCard(DeckTypes::Castle, 11).init(23);//SJH J Spades
+// this->hands[0].getCard(7).init(17);//SJH
 // this->hands[0].removeCard(7);
 // this->hands[0].removeCard(6);
 // this->hands[0].removeCard(5);
@@ -291,7 +297,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
 
                 if (!currentHand.isMarked(this->gamePlay.getCardCursor())) {
 
-                    currentHand.markCard(this->gamePlay.getCardCursor());
+                    currentHand.markCard(this->gamePlay.getCardCursor(), this->deck.getShield());
 
                 }
 
@@ -313,7 +319,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
 
                 if (currentHand.isMarked(this->gamePlay.getCardCursor())) {
 
-                    currentHand.markCard(this->gamePlay.getCardCursor());
+                    currentHand.markCard(this->gamePlay.getCardCursor(), this->deck.getShield());
                     
                 }
 
@@ -352,6 +358,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                         if (currentHand.getMarkedSuit(CardSuit::Hearts) && currentHand.getEnemyCardSuit() != CardSuit::Hearts && this->deck.getIndex(DeckTypes::Discard) >= 0) {
 
                             this->gamePlay.setHeartsCounter(20);
+                            this->playSoundEffect(SoundEffect::Deal);
 // printf("Hearts\n");
                         }
 
@@ -359,6 +366,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
 
                             // this->gamePlay.setDiamondsCounter(21);
                             this->gamePlay.setDiamondsCounter(11);
+                            this->playSoundEffect(SoundEffect::Deal);
 
                         }
 
@@ -415,6 +423,8 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                             this->gamePlay.setDiamondsCounter(11);
                             this->gamePlay.setCardCursor(0);
                             this->gameState = GameState::Game_Step0_AddCards;
+                            this->playSoundEffect(SoundEffect::Deal);
+
 
                         }
                         
@@ -466,9 +476,13 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                     uint8_t playerIdx = currentPlayer;
 
                     for (uint8_t i = 0; i < currentHand.getAttackValue(false); i++) {
-    // printf("Add Cards %i Tav: %i player %i, curIdx %i, max %i, Extras: %i >> ", i, this->deck.getIndex(DeckTypes::Tavern), playerIdx, this->hands[playerIdx].getCardIndex(), this->hands[playerIdx].getMaxNumberOfCards() , (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0));
+    // printf("Add Cards %i Tav: %i player %i, curIdx %i, marked %i, xxx: %i >> ", i, this->deck.getIndex(DeckTypes::Tavern), 
+    // playerIdx, 
+    // this->hands[playerIdx].getCardIndex(), 
+    // this->hands[playerIdx].getMarkedCardCount(), 
+    // this->hands[playerIdx].getMaxNumberOfCards() + (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0));
 
-                        if (this->deck.getIndex(DeckTypes::Tavern) >= 0 && this->hands[playerIdx].getCardIndex() - this->hands[playerIdx].getMarkedCardCount() + 1 < this->hands[playerIdx].getMaxNumberOfCards() + (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0)) {
+                        if (this->deck.getIndex(DeckTypes::Tavern) >= 0 && this->hands[playerIdx].getCardIndex() - this->hands[playerIdx].getMarkedCardCount() + 1 < this->hands[playerIdx].getMaxNumberOfCards()) {//} + (playerIdx == this->gamePlay.getCurrentPlayer() ? currentHand.getMarkedCardCount() : 0)) {
     //CHECK: if player has max cards do we just skip them and include next player or not?  Assume just skip.
                             Card card;
                             this->deck.dealCard(DeckTypes::Tavern, card);
@@ -502,6 +516,8 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                 this->gamePlay.setCounter((Constants::AttackInterval * ((currentHand.getAttackValue(true) + 1) / 2)) + Constants::AttackLength);
                 if (this->gamePlay.getCounter() > (Constants::AttackInterval * Constants::AttackMax) + Constants::AttackLength) this->gamePlay.setCounter((16 * Constants::AttackMax) + Constants::AttackLength);
                 this->gameState = GameState::Game_Step3_DealDamage_Init;
+                this->playSoundEffect(SoundEffect::EnemyDeath);
+
 
             }
 
@@ -581,6 +597,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                         this->gamePlay.setCounter(0);
 
                         if (this->gamePlay.getNumberOfPlayers() > 1) {
+// printf("swap 1\n");                            
                             this->gameState = GameState::Game_SwapPlayers_Init;                    
                         }
                         else {
@@ -592,7 +609,8 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                                 this->gamePlay.setCounter(Constants::GameOver_Delay);
                             }
                             else {
-                                this->gameState = GameState::Game_Step1_Play;                    
+                                this->gameState = GameState::Game_Step1_Play;    
+                                currentHand.clearMarks();                
                             }
 
                         }
@@ -699,6 +717,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
 
                     if (PC::buttons.pressed(BTN_UP)) {
 
+                        this->playSoundEffect(SoundEffect::Deal);
                         Card card = currentHand.getCard(this->gamePlay.getCardCursor());
                         currentHand.removeCard(this->gamePlay.getCardCursor());
                         this->deck.addCard(DeckTypes::Discard, card);
@@ -745,6 +764,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                             if (this->gamePlay.getNumberOfPlayers() > 1) {
 
                                 this->gameState = GameState::Game_SwapPlayers_Init;
+// printf("swap 2\n");                            
                                 currentPlayer++;
                                 currentPlayer = currentPlayer % this->gamePlay.getNumberOfPlayers();
                                 currentHand.setShieldValue(0);
@@ -805,6 +825,7 @@ this->hands[0].getCard(2).init(18);//SJH 6 Spades
                         }
                         else {
                             this->gameState = GameState::Game_Step1_Play;
+                            currentHand.clearMarks();                
                         }
 
                     }

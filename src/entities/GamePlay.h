@@ -106,9 +106,9 @@ struct GamePlay {
 
         }
 
-        void init(GameMode gameMode) {
+        void init(uint8_t numberOfPlayers) {
 
-            this->numberOfPlayers = static_cast<uint8_t>(gameMode);
+            this->numberOfPlayers = numberOfPlayers;
             this->currentPlayer = 0;
             this->replenish = 2;
 

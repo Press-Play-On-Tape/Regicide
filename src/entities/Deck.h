@@ -13,7 +13,6 @@ struct Deck {
         Card castleDeck[12];
         Card tavernDeck[42];
         Card discardDeck[42];
-        GameMode mode = GameMode::TwoPlayers;
 
         int8_t tavernDeckCount = 40; // 40 two players, 41 three players, 42 four players
         int8_t tavernDeckIndex = 40;
@@ -46,9 +45,8 @@ struct Deck {
 
         Deck() { };
 
-        void init(GameMode gameMode) {
+        void init(uint8_t numberOfPlayers) {
 
-            this->mode = gameMode;
 
             // Shuffle castle deck ..
 

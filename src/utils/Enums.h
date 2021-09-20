@@ -33,12 +33,6 @@ namespace Constants {
 
 }
 
-enum class GameMode : uint8_t {
-    NoPlayers,
-    OnePlayer,
-    TwoPlayers,
-};
-
 enum class GameState : uint8_t {
     Splash_Init,
     Splash,
@@ -63,16 +57,8 @@ enum class GameState : uint8_t {
 };
 
 enum class SoundEffect : uint8_t {
-    Tone_00,
-    Tone_01,
-    Tone_02,
-    Tone_03,
-    Tone_04,
-    Tone_05,
-    Tone_06,
-    Tone_07,
-    Tone_08,
-    Tone_09,
+    Deal,
+    EnemyDeath,
 };
 
 enum class CardSuit : uint8_t {
@@ -114,6 +100,11 @@ enum class EnemyKilledType : uint8_t {
     None,
     Tavern,
     Discard,
+};
+
+enum class Themes : uint8_t {
+    Main,
+    Winner
 };
 
 enum class SoundEffects : uint8_t {

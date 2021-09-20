@@ -31,6 +31,7 @@ void Game::gameSwapPlayers() {
         if (currentHand.getCardsAdded() > 0) {
             this->gamePlay.setCounter((Constants::DealDelay * currentHand.getCardsAdded()) + (Constants::DealDelay - 2));
             this->gameState = GameState::Game_Step0_AddCards;
+            this->playSoundEffect(SoundEffect::Deal);
             this->gamePlay.setDiamondsCounter(11);
         }
         else {

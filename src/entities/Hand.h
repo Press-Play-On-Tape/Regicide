@@ -65,7 +65,7 @@ struct Hand {
 
         }
 
-        void markCard(uint8_t index) {
+        void markCard(uint8_t index, bool globalShield) {
 
             this->mark[index] = !this->mark[index];
 
@@ -94,7 +94,7 @@ struct Hand {
 
             if (isValidAttack()) {
 
-                if (this->enemyCardSuit != CardSuit::Spades && this->getMarkedSuit(CardSuit::Spades)) {
+                if ((this->enemyCardSuit != CardSuit::Spades && this->getMarkedSuit(CardSuit::Spades)) || globalShield) {
                     this->shieldValue = this->getAttackValue(false);
                 }
 
@@ -113,6 +113,12 @@ struct Hand {
             for (uint8_t i = 0; i < HAND_SIZE; i++) {
 
                 this->mark[i] = false;
+
+            }
+
+            for (uint8_t i = 0; i < 4; i++) {
+
+                this->suits[i] = false;
 
             }
 
@@ -275,7 +281,7 @@ struct Hand {
                     return false;
 
                 case 1:
-                    return (cardsSelected[countIdx] * (countIdx + 1) <= 10) || (cardsSelected[countIdx] ==1 && countIdx >= 10);
+                    return (cardsSelected[countIdx] * (countIdx + 1) <= 10) || (cardsSelected[countIdx] == 1 && countIdx >= 10);
 
                 case 2:
                     return (cardsSelected[0] > 0 && cardsSelected[countIdx] == 1 && countIdx < 13);

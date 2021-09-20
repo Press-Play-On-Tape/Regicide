@@ -12,6 +12,7 @@ using PD = Pokitto::Display;
 void Game::winner_Init() {
 
     this->gameState = GameState::Winner;
+    this->playTheme(Themes::Winner);
 
 }   
 
