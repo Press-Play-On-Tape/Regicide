@@ -19,6 +19,7 @@ struct GamePlay {
         uint8_t diamondsCounter = 0;
         uint8_t enemyDiscardCounter = 0;
         uint8_t enemyTavernCounter = 0;
+        uint8_t replenish = 2;
 
         Card prevEnemy;
 
@@ -37,6 +38,8 @@ struct GamePlay {
         uint8_t getCardCursor()                         { return this->cardCursor; }
         uint8_t getEnemyDiscardCounter()                { return this->enemyDiscardCounter; }
         uint8_t getEnemyTavernCounter()                 { return this->enemyTavernCounter; }
+        uint8_t getReplenish()                          { return this->replenish; }
+
         Card& getPreviousEnemy()                        { return this->prevEnemy; }
 
         void setCurrentPlayer(uint8_t val)              { this->currentPlayer = val; }
@@ -49,6 +52,8 @@ struct GamePlay {
         void setCardCursor(uint8_t val)                 { this->cardCursor = val; }
         void setEnemyDiscardCounter(uint8_t val)        { this->enemyDiscardCounter = val; }
         void setEnemyTavernCounter(uint8_t val)         { this->enemyTavernCounter = val; }
+        void setReplenish(uint8_t val)                  { this->replenish = val; }
+
         void setPreviousEnemy(Card val)                 { this->prevEnemy = val; }
 
     public: // Methods
@@ -105,6 +110,7 @@ struct GamePlay {
 
             this->numberOfPlayers = static_cast<uint8_t>(gameMode);
             this->currentPlayer = 0;
+            this->replenish = 2;
 
             for (uint8_t i = 0; i < 4; i++) {
 

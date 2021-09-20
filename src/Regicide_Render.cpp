@@ -101,6 +101,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
     // If the players is at risk of dying, flash the health ..
 
     attack = currentHand.getAttackValue(false);
+
     if (currentHand.getHealth() < currentEnemy.getAttack() && this->gameState == GameState::Game_Step1_Play && PC::frameCount % 32 < 16) {
 
         PD::setColor(8);
@@ -147,7 +148,13 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
             }
 
             this->renderAttackButton(ButtonState::Disabled);
-            this->renderYieldButton(ButtonState::Disabled);
+            if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderYieldButton(ButtonState::Disabled);
+            }
+            else {
+                this->renderReplenishButton(ButtonState::Disabled, currentHand);
+            }
+
 
             break;
 
@@ -158,7 +165,13 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
 
             this->renderCaption(Caption::AttackOrYield);
             this->renderAttackButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Attack ? ButtonState::Highlighted : (currentHand.isValidAttack() ? ButtonState::Enabled : ButtonState::Disabled));
-            this->renderYieldButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Yield ? ButtonState::Highlighted : ButtonState::Enabled);
+
+            if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderYieldButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Yield ? ButtonState::Highlighted : ButtonState::Enabled);
+            }
+            else {
+                this->renderReplenishButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Replenish ? ButtonState::Highlighted : ButtonState::Enabled, currentHand);
+            }
 
             break;
 
@@ -184,7 +197,13 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
             }
 
             this->renderAttackButton(ButtonState::Disabled);
-            this->renderYieldButton(ButtonState::Disabled);
+            if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderYieldButton(ButtonState::Disabled);
+            }
+            else {
+                this->renderReplenishButton(ButtonState::Disabled, currentHand);
+            }
+
 
             break;
 
@@ -242,7 +261,13 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
             }
 
             this->renderAttackButton(ButtonState::Disabled);
-            this->renderYieldButton(ButtonState::Disabled);
+            if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderYieldButton(ButtonState::Disabled);
+            }
+            else {
+                this->renderReplenishButton(ButtonState::Disabled, currentHand);
+            }
+
 
             break;
 
@@ -296,7 +321,12 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
             }
 
             this->renderAttackButton(ButtonState::Disabled);
-            this->renderYieldButton(ButtonState::Disabled);
+            if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderYieldButton(ButtonState::Disabled);
+            }
+            else {
+                this->renderReplenishButton(ButtonState::Disabled, currentHand);
+            }
 
             break;
 
@@ -324,7 +354,13 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
         default:
 
             this->renderAttackButton(ButtonState::Disabled);
-            this->renderYieldButton(ButtonState::Disabled);
+            if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderYieldButton(ButtonState::Disabled);
+            }
+            else {
+                this->renderReplenishButton(ButtonState::Disabled, currentHand);
+            }
+
             break;
 
     }

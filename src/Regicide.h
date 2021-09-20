@@ -27,7 +27,7 @@ class Game {
         Attacks attacks;
         EnemyKilledType enemyKilled = EnemyKilledType::None;
         uint8_t nextCounter = 0;
-        
+
         File mainThemeFile;      
 
     public:
@@ -50,6 +50,7 @@ class Game {
         void gameSwapPlayers();
         bool changeAttackers(Card& currentEnemy);
         void discardPlayersCards(Hand &currentHand);
+        bool setCardCursor(Hand &currentHand);
 
         void playTheme();
         void muteTheme();
@@ -63,6 +64,7 @@ class Game {
         void renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
         void renderAttackButton(ButtonState state);
         void renderYieldButton(ButtonState state);
+        void renderReplenishButton(ButtonState state, Hand &currentHand);
         void renderLegend(Hand &currentHand);
         void renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards);
         void renderCaption(Caption caption1);

@@ -275,7 +275,7 @@ struct Hand {
                     return false;
 
                 case 1:
-                    return (cardsSelected[countIdx] * (countIdx + 1) <= 10);
+                    return (cardsSelected[countIdx] * (countIdx + 1) <= 10) || (cardsSelected[countIdx] ==1 && countIdx >= 10);
 
                 case 2:
                     return (cardsSelected[0] > 0 && cardsSelected[countIdx] == 1 && countIdx < 13);
@@ -284,9 +284,8 @@ struct Hand {
                     return false;
 
             }
-            if (count > 1)
 
-            return (count == 1 && (cardsSelected[countIdx] * (countIdx + 1) <= 10));
+            return false;
 
         }
 

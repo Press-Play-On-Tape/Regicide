@@ -140,11 +140,11 @@ void Game::game() {
                     case Constants::DealDelay * 10:
 
 
-//this->hands[0].getCard(0).init(22);//SJH 10 Spades
+this->hands[0].getCard(0).init(22);//SJH 10 Spades
 // this->hands[0].getCard(0).init(9);//SJH 10 Clubs
 // this->hands[0].getCard(0).init(32);//SJH Diamond
-// this->hands[0].getCard(1).init(17);//SJH 5 Spades
-// this->hands[0].getCard(2).init(18);//SJH 6 Spades
+this->hands[0].getCard(1).init(17);//SJH 5 Spades
+this->hands[0].getCard(2).init(18);//SJH 6 Spades
 // this->hands[0].getCard(0).init(0);//SJH
 // this->hands[0].getCard(1).init(0);//SJH
 // this->hands[0].getCard(2).init(0);//SJH
@@ -163,6 +163,16 @@ void Game::game() {
 // this->hands[1].removeCard(7);
 
 
+// this->hands[0].getCard(0).init(7);//SJH 8 Clubs
+// this->hands[0].getCard(1).init(21);//SJH 9 Spades
+// this->hands[0].getCard(1).init(23);//SJH J Spades
+// this->hands[0].removeCard(7);
+// this->hands[0].removeCard(6);
+// this->hands[0].removeCard(5);
+// this->hands[0].removeCard(4);
+// this->hands[0].removeCard(3);
+// this->hands[0].removeCard(2);
+// this->gamePlay.setReplenish(0);
 
 
 
@@ -207,11 +217,24 @@ void Game::game() {
 
             if (PC::buttons.pressed(BTN_LEFT)) {
 
-                if (this->gamePlay.getCardCursor() == 0) {
+                if (this->gamePlay.getCardCursor() == 0 && this->gamePlay.getNumberOfPlayers() > 1) {
 
                     bool isValidAttack = currentHand.isValidAttack();
 
                     this->gamePlay.setCardCursor(isValidAttack ? Constants::CardCursor_Attack : Constants::CardCursor_Yield);
+
+                }
+                else if (this->gamePlay.getCardCursor() == 0 && this->gamePlay.getNumberOfPlayers() == 1) {
+
+                    bool canReplenish = currentHand.getCardIndex() < 7 && this->deck.getIndex(DeckTypes::Tavern) >= 0;
+                    bool isValidAttack = currentHand.isValidAttack();
+// printf(" canReplensih %i, isValid %i\n", (uint16_t)canReplenish, (uint16_t)isValidAttack);
+                    if (isValidAttack) {
+                        this->gamePlay.setCardCursor(Constants::CardCursor_Attack);
+                    }
+                    else if (canReplenish) {
+                        this->gamePlay.setCardCursor(Constants::CardCursor_Replenish);
+                    }
 
                 }
                 else if (this->gamePlay.getCardCursor() > 0 && this->gamePlay.getCardCursor() <= currentHand.getCardIndex()) {
@@ -219,7 +242,7 @@ void Game::game() {
                     this->gamePlay.decCardCursor();
 
                 }
-                else if (this->gamePlay.getCardCursor() >= Constants::CardCursor_Attack) {
+                else if (this->gamePlay.getCardCursor() >= Constants::CardCursor_Attack && currentHand.getCardIndex() >= 0) {
 
                     this->gamePlay.setCardCursor(currentHand.getCardIndex());
 
@@ -229,21 +252,36 @@ void Game::game() {
 
             if (PC::buttons.pressed(BTN_RIGHT)) {
 
-                if (this->gamePlay.getCardCursor() >= Constants::CardCursor_Attack) {
-
+                if (this->gamePlay.getCardCursor() >= Constants::CardCursor_Attack && currentHand.getCardIndex() >= 0) {
+// printf("right 1\n");
                     this->gamePlay.setCardCursor(0);
 
                 }
                 else if (this->gamePlay.getCardCursor() < currentHand.getCardIndex()) {
+// printf("right 2\n");
 
                     this->gamePlay.incCardCursor();
 
                 }
-                else {
+                else if (this->gamePlay.getNumberOfPlayers() > 1) {
+// printf("right 3\n");
 
                     bool isValidAttack = currentHand.isValidAttack();
 
                     this->gamePlay.setCardCursor(isValidAttack ? Constants::CardCursor_Attack : Constants::CardCursor_Yield);
+
+                }
+                else {
+
+                    bool canReplenish = currentHand.getCardIndex() < 7 && this->deck.getIndex(DeckTypes::Tavern) >= 0;
+                    bool isValidAttack = currentHand.isValidAttack();
+// printf(" canReplensih %i, isValid %i\n", (uint16_t)canReplenish, (uint16_t)isValidAttack);
+                    if (isValidAttack) {
+                        this->gamePlay.setCardCursor(Constants::CardCursor_Attack);
+                    }
+                    else if (canReplenish) {
+                        this->gamePlay.setCardCursor(Constants::CardCursor_Replenish);
+                    }
 
                 }
 
@@ -259,7 +297,7 @@ void Game::game() {
 
             }
 
-            if (PC::buttons.pressed(BTN_UP) && this->gamePlay.getCardCursor() == Constants::CardCursor_Yield) {
+            if (PC::buttons.pressed(BTN_UP) && (this->gamePlay.getCardCursor() == Constants::CardCursor_Yield || this->gamePlay.getCardCursor() == Constants::CardCursor_Replenish)) {
 
                 bool isValidAttack = currentHand.isValidAttack();
 
@@ -281,19 +319,25 @@ void Game::game() {
 
             }
 
-            if (PC::buttons.pressed(BTN_DOWN) && this->gamePlay.getCardCursor() == Constants::CardCursor_Attack) {
+            if (PC::buttons.pressed(BTN_DOWN) && this->gamePlay.getCardCursor() == Constants::CardCursor_Attack && this->gamePlay.getNumberOfPlayers() > 1) {
 
                 this->gamePlay.setCardCursor(Constants::CardCursor_Yield);
+
+            }
+
+            if (PC::buttons.pressed(BTN_DOWN) && this->gamePlay.getCardCursor() == Constants::CardCursor_Attack && this->gamePlay.getNumberOfPlayers() == 1) {
+// printf("currentHand.getCardIndex() %i\n", (uint16_t)currentHand.getCardIndex());
+                bool canReplenish = currentHand.getCardIndex() < 7 && this->deck.getIndex(DeckTypes::Tavern) >= 0;
+
+                if (canReplenish) {
+                    this->gamePlay.setCardCursor(Constants::CardCursor_Replenish);
+                }
 
             }
 
             if (PC::buttons.pressed(BTN_A)) {
 
                 switch (this->gamePlay.getCardCursor()) {
-
-                    // case 0 ... 10:
-                    //     currentHand.markCard(cardCursor);
-                    //     break;
 
                     case Constants::CardCursor_Attack:
                         
@@ -348,7 +392,33 @@ void Game::game() {
 
                         break;
 
+                    case Constants::CardCursor_Replenish:
 
+                        uint8_t cardsToReplenish = 7 - currentHand.getCardIndex();
+// printf("Replenish %i cards\n", cardsToReplenish);
+                        if (this->deck.getIndex(DeckTypes::Tavern) + 1 < cardsToReplenish) cardsToReplenish = this->deck.getIndex(DeckTypes::Tavern) + 1;                  
+// printf("Replenish %i cards\n", cardsToReplenish);
+
+                        if (cardsToReplenish > 0) {
+
+                            for (uint8_t i = 0; i < cardsToReplenish; i++) {
+
+                                Card card;
+                                this->deck.dealCard(DeckTypes::Tavern, card);
+                                currentHand.addCard(card);
+                            }
+
+                            currentHand.setCardsAdded(cardsToReplenish);
+
+                            this->gamePlay.setReplenish(this->gamePlay.getReplenish() - 1);
+                            this->gamePlay.setCounter((Constants::DealDelay * currentHand.getCardsAdded()) + (Constants::DealDelay - 2));
+                            this->gamePlay.setDiamondsCounter(11);
+                            this->gamePlay.setCardCursor(0);
+                            this->gameState = GameState::Game_Step0_AddCards;
+
+                        }
+                        
+                        break;
                 }
 
             }
@@ -514,7 +584,17 @@ void Game::game() {
                             this->gameState = GameState::Game_SwapPlayers_Init;                    
                         }
                         else {
-                            this->gameState = GameState::Game_Step1_Play;                    
+
+                            bool endOfGame = this->setCardCursor(currentHand);
+
+                            if (endOfGame) {
+                                this->gameState = GameState::Game_Over;
+                                this->gamePlay.setCounter(Constants::GameOver_Delay);
+                            }
+                            else {
+                                this->gameState = GameState::Game_Step1_Play;                    
+                            }
+
                         }
 
                     }
@@ -678,8 +758,16 @@ void Game::game() {
 
                                 currentHand.setShieldValue(0);
                                 currentHand.clearMarks();
-                                this->gameState = GameState::Game_Step1_Play;
-                                this->gamePlay.setCardCursor(0);
+                                    
+                                bool endOfGame = this->setCardCursor(currentHand);
+
+                                if (endOfGame) {
+                                    this->gameState = GameState::Game_Over;
+                                    this->gamePlay.setCounter(Constants::GameOver_Delay);               
+                                }
+                                else {
+                                    this->gameState = GameState::Game_Step1_Play;                    
+                                }
                                 
                             }
 
@@ -708,7 +796,18 @@ void Game::game() {
             switch (this->gamePlay.getCounter()) {
 
                 case 0:
-                    this->gameState = GameState::Game_Step1_Play;
+                    {
+                        bool endOfGame = this->setCardCursor(currentHand);
+
+                        if (endOfGame) {
+                            this->gameState = GameState::Game_Over;
+                            this->gamePlay.setCounter(Constants::GameOver_Delay);
+                        }
+                        else {
+                            this->gameState = GameState::Game_Step1_Play;
+                        }
+
+                    }
                     break;
 
                 default:
@@ -754,5 +853,53 @@ void Game::discardPlayersCards(Hand &currentHand) {
         }
 
     }
+
+}
+
+bool Game::setCardCursor(Hand &currentHand) { // returns end of game
+
+    if (this->gamePlay.getNumberOfPlayers() > 1) {
+
+        if (this->hands[0].getCardIndex() < 0 && this->hands[1].getCardIndex()) {
+
+            return true;
+
+        }
+        else if (currentHand.getCardIndex() < 0) {
+
+            this->gamePlay.setCardCursor(Constants::CardCursor_Yield);
+
+        }
+        else {
+
+            this->gamePlay.setCardCursor(0);
+
+        }
+
+    }
+    else {
+
+        if (currentHand.getCardIndex() < 0) {
+
+            if (this->gamePlay.getReplenish() > 0) {
+
+                this->gamePlay.setCardCursor(Constants::CardCursor_Replenish);
+
+            }
+            else {
+
+                return true;
+            }
+
+        }
+        else {
+
+            this->gamePlay.setCardCursor(0);
+
+        }
+
+    }
+
+    return false;
 
 }

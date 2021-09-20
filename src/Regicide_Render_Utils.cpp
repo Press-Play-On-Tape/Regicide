@@ -304,6 +304,43 @@ void Game::renderYieldButton(ButtonState state) {
 
 }
 
+void Game::renderReplenishButton(ButtonState state, Hand &currentHand) {
+
+    if (this->gamePlay.getReplenish() > 0 && currentHand.getCardIndex() < 7) {
+
+        PD::drawBitmap(152, 164, Images::Buttons_Replenish[static_cast<uint8_t>(state)]);
+
+        switch (state) {
+
+            case ButtonState::Disabled:
+                PD::drawBitmap(207, 164, Images::Buttons_Replenish_Grey_Digits[this->gamePlay.getReplenish()]);
+                break;
+
+            case ButtonState::Highlighted:
+                PD::drawBitmap(207, 164, Images::Buttons_Replenish_Highlight_Digits[this->gamePlay.getReplenish()]);
+                break;
+
+            case ButtonState::Enabled:
+                PD::drawBitmap(207, 164, Images::Buttons_Replenish_Digits[this->gamePlay.getReplenish()]);
+                break;
+
+        }
+
+    }
+    else if (this->gamePlay.getReplenish() > 0 && currentHand.getCardIndex() == 7) {
+
+        PD::drawBitmap(152, 164, Images::Buttons_Replenish[static_cast<uint8_t>(ButtonState::Disabled)]);
+        PD::drawBitmap(207, 164, Images::Buttons_Replenish_Grey_Digits[this->gamePlay.getReplenish()]);
+
+    }
+    else {
+
+        PD::drawBitmap(152, 164, Images::Button_Replenish_Empty_Grey);
+
+    }
+
+}
+
 void Game::renderLegend(Hand &currentHand) {
 
     PD::drawBitmap(151, 105, Images::LegendPanel);

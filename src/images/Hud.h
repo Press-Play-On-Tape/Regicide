@@ -8,6 +8,17 @@ namespace Images {
     #include "hud/Button_Yield.h"
     #include "hud/Button_Yield_Grey.h"
     #include "hud/Button_Yield_Highlight.h"
+    #include "hud/Button_Replenish.h"
+    #include "hud/Button_Replenish_1.h"
+    #include "hud/Button_Replenish_2.h"
+    #include "hud/Button_Replenish_Grey.h"
+    #include "hud/Button_Replenish_Grey_1.h"
+    #include "hud/Button_Replenish_Grey_2.h"
+    #include "hud/Button_Replenish_Highlight.h"
+    #include "hud/Button_Replenish_Highlight_1.h"
+    #include "hud/Button_Replenish_Highlight_2.h"
+    #include "hud/Button_Replenish_Empty_Grey.h"
+    
     #include "hud/Counter.h"
     #include "hud/Counter.h"
     #include "hud/AttackHealth.h"
@@ -127,6 +138,30 @@ namespace Images {
         Button_Yield_Highlight
     };
 
+    const uint8_t * const Buttons_Replenish[] = { 
+        Button_Replenish,
+        Button_Replenish_Grey,
+        Button_Replenish_Highlight
+    };
+
+    const uint8_t * const Buttons_Replenish_Digits[] = { 
+        Button_Replenish_1,
+        Button_Replenish_1,
+        Button_Replenish_2
+    };
+
+    const uint8_t * const Buttons_Replenish_Highlight_Digits[] = { 
+        Button_Replenish_Highlight_1,
+        Button_Replenish_Highlight_1,
+        Button_Replenish_Highlight_2
+    };
+
+    const uint8_t * const Buttons_Replenish_Grey_Digits[] = { 
+        Button_Replenish_Grey_1,
+        Button_Replenish_Grey_1,
+        Button_Replenish_Grey_2
+    };
+    
     const uint8_t * const Captions[] = { 
         AttackingTheEnemy,
         AttackOrYield,
