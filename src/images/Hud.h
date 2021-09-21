@@ -25,7 +25,6 @@ namespace Images {
     #include "hud/buttons/Button_Replenish_Empty_Grey.h"
     
     #include "hud/Counter.h"
-    #include "hud/Counter_Red.h"
     #include "hud/AttackHealth.h"
     #include "hud/banners/Banner_Castle.h"
     #include "hud/banners/Banner_Discard.h"

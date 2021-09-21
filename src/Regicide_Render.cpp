@@ -29,7 +29,8 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
     if (currentEnemy.getAttack() - currentEnemy.getShieldVal() > 0) {
         attack = currentEnemy.getAttack() - currentEnemy.getShieldVal();
     }
-    
+
+
     PD::drawBitmap(14, 89, Images::AttackHealth);
 
     {
