@@ -66,7 +66,7 @@ class Game {
         void renderAttackButton(ButtonState state);
         void renderYieldButton(ButtonState state);
         void renderReplenishButton(ButtonState state, Hand &currentHand);
-        void renderLegend(Hand &currentHand);
+        void renderLegend(Hand &currentHand, Card &currentEnemy);
         void renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards);
         void renderCaption(Caption caption1);
         void renderCaption(Caption caption1, Caption caption2);

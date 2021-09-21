@@ -11,6 +11,8 @@ struct Card {
         uint8_t attack;
         uint8_t health;
 
+        bool shield = false;
+        uint8_t shieldVal = 0;
 
     public: // Properties
 
@@ -18,10 +20,15 @@ struct Card {
         uint8_t getAttack()                 { return this->attack; }
         uint8_t getHealth()                 { return this->health; }
 
+        bool getShield()                    { return this->shield; }
+        uint8_t getShieldVal()              { return this->shieldVal; }
+        
         void setCardIndex(uint8_t val)      { this->cardIndex = val; }
         void setAttack(uint8_t val)         { this->attack = val; }
         void setHealth(uint8_t val)         { this->health = val; }
 
+        void setShield(bool val)            { this->shield = val; }
+        void setShieldVal(uint8_t val)      { this->shieldVal = val; }
 
     public: // Methods 
 
@@ -36,6 +43,9 @@ struct Card {
             this->cardIndex = cardIndex;
             this->attack = attack;
             this->health = health;
+
+            this->shield = false;
+            this->shieldVal = 0;
 
         }
 

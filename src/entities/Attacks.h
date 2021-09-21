@@ -21,8 +21,8 @@ struct Attacks {
 
         void launchAttach() {
 
-            const uint8_t x[] = { 10, 20 };
-            const uint8_t y[] = { 20, 35 };
+            // const uint8_t x[] = { 10, 20 };
+            // const uint8_t y[] = { 20, 35 };
 
             for (uint8_t i = 0; i < Constants::AttackMax; i++) {
 
@@ -30,8 +30,10 @@ struct Attacks {
                     
                     uint8_t j = i % 2;
 
-                    this->attacks[i].setX(x[j] + random(-5, 5));
-                    this->attacks[i].setY(y[j] + random(-5, 5));
+                    // this->attacks[i].setX(x[j] + random(-5, 5));
+                    // this->attacks[i].setY(y[j] + random(-5, 5));
+                    this->attacks[i].setX(random(20, 30));
+                    this->attacks[i].setY(random(15, 40));
                     this->attacks[i].setIndex(Constants::AttackLength - 1); 
                     break;
 

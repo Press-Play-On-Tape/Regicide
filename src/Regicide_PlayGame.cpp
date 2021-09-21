@@ -297,7 +297,7 @@ void Game::game() {
 
                 if (!currentHand.isMarked(this->gamePlay.getCardCursor())) {
 
-                    currentHand.markCard(this->gamePlay.getCardCursor(), this->deck.getShield());
+                    currentHand.markCard(this->gamePlay.getCardCursor());
 
                 }
 
@@ -319,7 +319,7 @@ void Game::game() {
 
                 if (currentHand.isMarked(this->gamePlay.getCardCursor())) {
 
-                    currentHand.markCard(this->gamePlay.getCardCursor(), this->deck.getShield());
+                    currentHand.markCard(this->gamePlay.getCardCursor());
                     
                 }
 
@@ -347,7 +347,7 @@ void Game::game() {
 
                     case Constants::CardCursor_Attack:
                         
-                        this->gamePlay.setHealthToDiscard(currentEnemy.getAttack() - currentHand.getShieldValue());
+                        this->gamePlay.setHealthToDiscard(currentEnemy.getAttack() - currentEnemy.getShieldVal() - currentHand.getShieldValue());
                         this->deck.print();
                         this->gameState = GameState::Game_Step2_Activate;
                         currentHand.setCardsAdded(0);
@@ -373,7 +373,8 @@ void Game::game() {
                         // If the player has played a shield save it for the life of the current enemy ..
 
                         if (currentHand.getMarkedSuit(CardSuit::Spades)) {
-                            this->deck.setShield(true);
+                            currentEnemy.setShield(true);
+                            currentEnemy.setShieldVal(currentEnemy.getShieldVal() + currentHand.getShieldValue());
                         }
 
                         break;
@@ -384,7 +385,7 @@ void Game::game() {
                         currentHand.setCardsAdded(0);
                         this->gamePlay.setCounter(0);
                         this->gamePlay.setCardCursor(0);
-                        this->gamePlay.setHealthToDiscard(currentEnemy.getAttack());
+                        this->gamePlay.setHealthToDiscard(currentEnemy.getAttack() - currentEnemy.getShieldVal());
 
                         if (currentHand.getHealth() < this->gamePlay.getHealthToDiscard()) {
 

@@ -8,8 +8,6 @@ struct Deck {
 
     private:
 
-        bool shield = false;
-
         Card castleDeck[12];
         Card tavernDeck[42];
         Card discardDeck[42];
@@ -36,12 +34,7 @@ struct Deck {
 
         } 
 
-    public: // Properties
-
-        bool getShield()                { return this->shield; }
-        void setShield(bool val)        { this->shield = val; }
-
-    public: // Methods
+    public: 
 
         Deck() { };
 
@@ -99,7 +92,6 @@ struct Deck {
                     card.print();
                     this->castleDeck[this->castleDeckIndex].init(Cards::NoCard);
                     this->castleDeckIndex--;
-                    this->shield = false;
                     break;
 
                 case DeckTypes::Tavern:
@@ -164,17 +156,11 @@ struct Deck {
                     break;
 
                 case DeckTypes::Tavern:
-// printf("About to add ");
-// card.print();                
-// printf(" to tavern\n");
                     this->tavernDeckIndex++;
                     this->tavernDeck[this->tavernDeckIndex].init(card.getCardIndex());
                     break;
 
                 case DeckTypes::Discard:
-// printf("About to add ");
-// card.print();                
-// printf(" to discard\n");
                     this->discardDeckIndex++;
                     this->discardDeck[this->discardDeckIndex].init(card.getCardIndex());
                     break;

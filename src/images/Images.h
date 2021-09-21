@@ -4,7 +4,7 @@
 #include "Cards.h"
 #include "Controls.h"
 #include "Death.h"
-#include "Explosion.h"
 #include "Hud.h"
 #include "PPOT.h"
+#include "Swoosh.h"
 #include "Titles.h"

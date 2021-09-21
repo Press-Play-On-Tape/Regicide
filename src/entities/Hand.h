@@ -65,7 +65,7 @@ struct Hand {
 
         }
 
-        void markCard(uint8_t index, bool globalShield) {
+        void markCard(uint8_t index) {
 
             this->mark[index] = !this->mark[index];
 
@@ -94,7 +94,7 @@ struct Hand {
 
             if (isValidAttack()) {
 
-                if ((this->enemyCardSuit != CardSuit::Spades && this->getMarkedSuit(CardSuit::Spades)) || globalShield) {
+                if ((this->enemyCardSuit != CardSuit::Spades && this->getMarkedSuit(CardSuit::Spades))) {
                     this->shieldValue = this->getAttackValue(false);
                 }
 

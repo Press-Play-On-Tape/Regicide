@@ -24,7 +24,12 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
     PD::drawBitmap(84, 1, Images::Banner_Discard);
     this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1, this->gamePlay.getHeartsCounter() == 0);
 
-    uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
+    uint8_t attack = 0;
+    
+    if (currentEnemy.getAttack() - currentEnemy.getShieldVal() > 0) {
+        attack = currentEnemy.getAttack() - currentEnemy.getShieldVal();
+    }
+    
     PD::drawBitmap(14, 89, Images::AttackHealth);
 
     {
@@ -132,7 +137,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
 
     }    
 
-    this->renderLegend(currentHand);
+    this->renderLegend(currentHand, currentEnemy);
 
     switch (this->gameState) {
 
@@ -225,7 +230,8 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
                         if (this->attacks.getAttack(i).getIndex() > 0) {
 
                             Attack &attack = this->attacks.getAttack(i);
-                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Explosion[attack.getIndex() / (Constants::AttackLength / 7)]);
+// printf("attack.getIndex() %i / (Constants::AttackLength / 4) %i = %i \n", attack.getIndex(),(Constants::AttackLength / 4), attack.getIndex() / (Constants::AttackLength / 4));                            
+                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Swooshes[attack.getIndex() / (Constants::AttackLength / 4)]);
 
                         }
 

@@ -341,7 +341,7 @@ void Game::renderReplenishButton(ButtonState state, Hand &currentHand) {
 
 }
 
-void Game::renderLegend(Hand &currentHand) {
+void Game::renderLegend(Hand &currentHand, Card &currentEnemy) {
 
     PD::drawBitmap(151, 105, Images::LegendPanel);
 
@@ -357,7 +357,7 @@ void Game::renderLegend(Hand &currentHand) {
     PD::drawBitmap(158, 129, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Clubs)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Clubs)]);
     PD::drawBitmap(170, 130, selected ? Images::Legend_Damage_Highlight : Images::Legend_Damage_Grey);
 
-    selected = currentHand.getMarkedSuit(CardSuit::Spades) || this->deck.getShield();
+    selected = currentHand.getMarkedSuit(CardSuit::Spades) || currentEnemy.getShield();
     PD::drawBitmap(158, 139, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Spades)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Spades)]);
     PD::drawBitmap(170, 140, selected ? Images::Legend_Shield_Highlight : Images::Legend_Shield_Grey);
 

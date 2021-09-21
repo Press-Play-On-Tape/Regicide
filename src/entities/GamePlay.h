@@ -44,7 +44,7 @@ struct GamePlay {
 
         void setCurrentPlayer(uint8_t val)              { this->currentPlayer = val; }
         void setNumberOfPlayers(uint8_t val)            { this->numberOfPlayers = val; }
-        void setHealthToDiscard(uint8_t val)            { this->healthToDiscard = val; }
+        void setHealthToDiscard(int8_t val)             { val >= 0 ? this->healthToDiscard = val : 0; }
 
         void setCounter(uint16_t val)                   { this->counter = val; }
         void setHeartsCounter(uint8_t val)              { this->heartsCounter = val; }
