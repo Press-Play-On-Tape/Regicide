@@ -2,6 +2,11 @@
 
 namespace Images {
 
+    #include "hud/controls/Sound_Both.h"
+    #include "hud/controls/Sound_Music.h"
+    #include "hud/controls/Sound_None.h"
+    #include "hud/controls/Sound_SFX.h"
+
     #include "hud/buttons/Button_Attack.h"
     #include "hud/buttons/Button_Attack_Grey.h"
     #include "hud/buttons/Button_Attack_Highlight.h"
@@ -73,18 +78,18 @@ namespace Images {
     #include "hud/Arrow_Left.h"
     #include "hud/Arrow_Right.h"
 
-    #include "captions/AttackingTheEnemy.h"
-    #include "captions/AttackOrYield.h"
-    #include "captions/DiscardPoints.h"
-    #include "captions/EnemyAttacked.h"
-    #include "captions/EnemyDefeated.h"
-    #include "captions/CardAddedToDiscard.h"
-    #include "captions/CardAddedToHand.h"
-    #include "captions/CardAddedToTavern.h"
-    #include "captions/CardsAddedToTavern.h"
-    #include "captions/YouDied.h"
-    #include "captions/YouSurvived.h"
-    #include "captions/YouSurvivedThisRound.h"
+    #include "hud/captions/AttackingTheEnemy.h"
+    #include "hud/captions/AttackOrYield.h"
+    #include "hud/captions/DiscardPoints.h"
+    #include "hud/captions/EnemyAttacked.h"
+    #include "hud/captions/EnemyDefeated.h"
+    #include "hud/captions/CardAddedToDiscard.h"
+    #include "hud/captions/CardAddedToHand.h"
+    #include "hud/captions/CardAddedToTavern.h"
+    #include "hud/captions/CardsAddedToTavern.h"
+    #include "hud/captions/YouDied.h"
+    #include "hud/captions/YouSurvived.h"
+    #include "hud/captions/YouSurvivedThisRound.h"
 
     const uint8_t * const SmallNumbers[] = { 
         Number_Small_00,

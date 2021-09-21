@@ -230,8 +230,8 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
                         if (this->attacks.getAttack(i).getIndex() > 0) {
 
                             Attack &attack = this->attacks.getAttack(i);
-// printf("attack.getIndex() %i / (Constants::AttackLength / 4) %i = %i \n", attack.getIndex(),(Constants::AttackLength / 4), attack.getIndex() / (Constants::AttackLength / 4));                            
-                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Swooshes[attack.getIndex() / (Constants::AttackLength / 4)]);
+printf("attack.getIndex() %i / (Constants::AttackLength / 2) %i = %i \n", attack.getIndex(),(Constants::AttackLength / 2), attack.getIndex() / (Constants::AttackLength / 2));                            
+                            PD::drawBitmap(attack.getX(), attack.getY(), Images::Swooshes[(attack.getIndex() / (Constants::AttackLength / 4)) % 4]);
 
                         }
 

@@ -514,11 +514,9 @@ void Game::game() {
 
             if (this->gamePlay.getHeartsCounter() == 0 && this->gamePlay.getDiamondsCounter() == 0) {
 
-                this->gamePlay.setCounter((Constants::AttackInterval * ((currentHand.getAttackValue(true) + 1) / 2)) + Constants::AttackLength);
-                if (this->gamePlay.getCounter() > (Constants::AttackInterval * Constants::AttackMax) + Constants::AttackLength) this->gamePlay.setCounter((16 * Constants::AttackMax) + Constants::AttackLength);
+                this->gamePlay.setCounter((4 * Constants::AttackInterval) + 1);
                 this->gameState = GameState::Game_Step3_DealDamage_Init;
                 this->playSoundEffect(SoundEffect::EnemyDeath);
-
 
             }
 
@@ -530,7 +528,7 @@ void Game::game() {
 
             this->gamePlay.decCounter();
 
-            if ((this->gamePlay.getCounter() - Constants::AttackLength) % Constants::AttackInterval == 0 && this->gamePlay.getCounter() > Constants::AttackLength) {
+            if ((this->gamePlay.getCounter() % Constants::AttackInterval) == 0 && this->gamePlay.getCounter() > 0) {
 
                 this->attacks.launchAttach();
 
@@ -599,7 +597,8 @@ void Game::game() {
 
                         if (this->gamePlay.getNumberOfPlayers() > 1) {
 // printf("swap 1\n");                            
-                            this->gameState = GameState::Game_SwapPlayers_Init;                    
+                            this->gameState = GameState::Game_SwapPlayers_Init;      
+                                          
                         }
                         else {
 
@@ -637,7 +636,6 @@ void Game::game() {
                         this->gamePlay.setCounter(Constants::GameOver_Delay);
 
                     }
-
 
                 }
 

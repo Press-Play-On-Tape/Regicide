@@ -26,8 +26,8 @@ namespace Constants {
     constexpr uint8_t NoSelection = 255;
 
     constexpr uint8_t AttackMax = 4;
-    constexpr uint8_t AttackLength = 4 * 4;
-    constexpr uint8_t AttackInterval = 15;
+    constexpr uint8_t AttackLength = 2 * 4;
+    constexpr uint8_t AttackInterval = 10;
 
     constexpr uint8_t GameOver_Delay = 176 + 72;
 
