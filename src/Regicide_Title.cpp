@@ -30,6 +30,12 @@ void Game::title() {
 
     }         
 
+    if (PC::buttons.pressed(BTN_B)) { 
+
+        this->gameState = GameState::Instructions_Init;
+
+    }         
+
     if (PC::buttons.pressed(BTN_UP)) {
 
         this->cookie->sfx--;

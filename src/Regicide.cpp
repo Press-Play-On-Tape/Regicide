@@ -32,6 +32,15 @@ void Game::loop() {
             this->title();
             break;
 
+        case GameState::Instructions_Init:
+            this->instructions_Init();
+            this->instructions();
+            break;
+
+        case GameState::Instructions:
+            this->instructions();
+            break;
+
         case GameState::NoOfPlayers_Init:
             this->numberOfPlayers_Init();
             this->numberOfPlayers();

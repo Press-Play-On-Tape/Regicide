@@ -38,6 +38,8 @@ enum class GameState : uint8_t {
     Splash,
     Title_Init,
     Title,
+    Instructions_Init,
+    Instructions,
     NoOfPlayers_Init,
     NoOfPlayers,
     Game_Init,

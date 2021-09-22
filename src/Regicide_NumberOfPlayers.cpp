@@ -36,6 +36,11 @@ void Game::numberOfPlayers() {
 
     }         
 
+    if (PC::buttons.pressed(BTN_B)) { 
+
+        this->gameState = GameState::Title;
+
+    }    
 
     //this->gamePlay.getNumberOfPlayers()
   
