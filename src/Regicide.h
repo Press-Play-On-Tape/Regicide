@@ -30,6 +30,7 @@ class Game {
         uint8_t nextCounter = 0;
 
         File mainThemeFile;      
+        File instructionFile;      
 
     public:
 

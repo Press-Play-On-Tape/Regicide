@@ -31,6 +31,13 @@ namespace Constants {
 
     constexpr uint8_t GameOver_Delay = 176 + 72;
 
+    constexpr char instructions[16][19] = { 
+        "music/Regic_03.raw", "music/Regic_04.raw", "music/Regic_05.raw", "music/Regic_06.raw",
+        "music/Regic_07.raw", "music/Regic_08.raw", "music/Regic_09.raw", "music/Regic_10.raw",
+        "music/Regic_11.raw", "music/Regic_12.raw", "music/Regic_13.raw", "music/Regic_14.raw",
+        "music/Regic_15.raw", "music/Regic_16.raw", "music/Regic_17.raw", "music/Regic_18.raw",
+    };
+
 }
 
 enum class GameState : uint8_t {

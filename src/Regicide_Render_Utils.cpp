@@ -361,6 +361,27 @@ void Game::renderLegend(Hand &currentHand, Card &currentEnemy) {
     PD::drawBitmap(158, 139, selected ? Images::Suits_Coloured[static_cast<uint8_t>(CardSuit::Spades)] : Images::Suits_Disabled[static_cast<uint8_t>(CardSuit::Spades)]);
     PD::drawBitmap(170, 140, selected ? Images::Legend_Shield_Highlight : Images::Legend_Shield_Grey);
 
+    PD::setColor(1);
+    switch (currentEnemy.getSuit()) {
+
+        case CardSuit::Hearts:
+            PD::fillRect(154, 108, 60, 10);
+            break;
+
+        case CardSuit::Diamonds:
+            PD::fillRect(154, 118, 60, 10);
+            break;
+
+        case CardSuit::Clubs:
+            PD::fillRect(154, 128, 60, 10);
+            break;
+
+        case CardSuit::Spades:
+            PD::fillRect(154, 138, 60, 10);
+            break;
+            
+    }
+
 }
 
 void Game::renderCaption(Caption caption) {

@@ -106,7 +106,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
 
     // If the players is at risk of dying, flash the health ..
 
-    attack = currentHand.getAttackValue(false);
+    attack = currentHand.getAttackValue(true);
 
     if (currentHand.getHealth() < currentEnemy.getAttack() && this->gameState == GameState::Game_Step1_Play && PC::frameCount % 32 < 16) {
 
@@ -231,7 +231,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
                         if (this->attacks.getAttack(i).getIndex() > 0) {
 
                             Attack &attack = this->attacks.getAttack(i);
-printf("attack.getIndex() %i / (Constants::AttackLength / 2) %i = %i \n", attack.getIndex(),(Constants::AttackLength / 2), attack.getIndex() / (Constants::AttackLength / 2));                            
+// printf("attack.getIndex() %i / (Constants::AttackLength / 2) %i = %i \n", attack.getIndex(),(Constants::AttackLength / 2), attack.getIndex() / (Constants::AttackLength / 2));                            
                             PD::drawBitmap(attack.getX(), attack.getY(), Images::Swooshes[(attack.getIndex() / (Constants::AttackLength / 4)) % 4]);
 
                         }

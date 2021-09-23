@@ -14,7 +14,6 @@ void Game::setup(GameCookie *cookie) {
 
 void Game::loop() {
 
-    PD::clear();
     PC::buttons.pollButtons();
 
     switch (this->gameState) {
@@ -28,6 +27,7 @@ void Game::loop() {
             [[fallthrough]]
 
         case GameState::Title:
+            PD::clear();
             this->title();
             break;
 
@@ -44,6 +44,7 @@ void Game::loop() {
             [[fallthrough]]
 
         case GameState::NoOfPlayers:
+            PD::clear();
             this->numberOfPlayers();
             break;
 
@@ -60,6 +61,7 @@ void Game::loop() {
         case GameState::Game_Step4_SufferDamage:
         case GameState::Game_Step5_EnemyDead:
         case GameState::Game_Over:
+            PD::clear();
             this->game();
             break;
 
@@ -68,6 +70,7 @@ void Game::loop() {
             [[fallthrough]]
 
         case GameState::Game_SwapPlayers:
+            PD::clear();
             this->gameSwapPlayers();
             break;
 
@@ -76,6 +79,7 @@ void Game::loop() {
             [[fallthrough]]
 
         case GameState::Winner:
+            PD::clear();
             this->winner();
             break;
 

@@ -6,12 +6,20 @@ using PC = Pokitto::Core;
 using PD = Pokitto::Display;
 
 
+
+
 // ----------------------------------------------------------------------------
 //  Handle state updates .. 
 //
 void Game::instructions_Init() {
 
     this->gameState = GameState::Instructions;
+    this->gamePlay.setCounter(1);
+
+    if (this->instructionFile.openRO(Constants::instructions[this->gamePlay.getCounter() - 1])) {
+        this->instructionFile.read(PD::getBuffer(), 2);
+        this->instructionFile.read(PD::getBuffer(), (220 * 176 / 2));
+    }
 
 }   
 
@@ -29,21 +37,44 @@ void Game::instructions() {
 
     }         
 
+    if (PC::buttons.pressed(BTN_LEFT)) { 
 
-    // Render page ..
+        this->gamePlay.decCounter();
+        
+        if (this->gamePlay.getCounter() == 0) {
 
-    PD::fillScreen(13);
-    PD::setColor(1);
-    PD::fillRect(0, 0, 220, 20);
+            this->gameState = GameState::NoOfPlayers_Init;
 
-    PD::drawBitmap(0, 12, Images::Mountains);
-    PD::drawBitmap(110, 12, Images::Mountains, NOROT, FLIPH);
+        }
+        else {
+            
+            if (this->instructionFile.openRO(Constants::instructions[this->gamePlay.getCounter() - 1])) {
+                this->instructionFile.read(PD::getBuffer(), 2);
+                this->instructionFile.read(PD::getBuffer(), (220 * 176 / 2));
+            }
 
-    PD::setColor(8);
-    PD::drawFastVLine(6, 0, 176);
-    PD::drawFastVLine(8, 0, 176);
-    PD::fillRect(10, 0, 25, 176);
-    PD::drawFastVLine(34, 0, 176);
-    PD::drawFastVLine(36, 0, 176);
+        }
+
+    }         
+
+    if (PC::buttons.pressed(BTN_RIGHT)) { 
+
+        this->gamePlay.incCounter();
+        
+        if (this->gamePlay.getCounter() == 16) {
+
+            this->gameState = GameState::NoOfPlayers_Init;
+
+        }
+        else {
+
+            if (this->instructionFile.openRO(Constants::instructions[this->gamePlay.getCounter() - 1])) {
+                this->instructionFile.read(PD::getBuffer(), 2);
+                this->instructionFile.read(PD::getBuffer(), (220 * 176 / 2));
+            }
+
+        }
+
+    }         
 
 }
