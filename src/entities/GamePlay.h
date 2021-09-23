@@ -13,6 +13,7 @@ struct GamePlay {
         uint8_t healthToDiscard = 0;
 
         uint8_t cardCursor = 0;
+        uint8_t selectorIdx = 0;
 
         uint16_t counter = 0;
         uint8_t heartsCounter = 0;
@@ -39,6 +40,7 @@ struct GamePlay {
         uint8_t getEnemyDiscardCounter()                { return this->enemyDiscardCounter; }
         uint8_t getEnemyTavernCounter()                 { return this->enemyTavernCounter; }
         uint8_t getReplenish()                          { return this->replenish; }
+        uint8_t getSelectorIndex()                      { return this->selectorIdx; }
 
         Card& getPreviousEnemy()                        { return this->prevEnemy; }
 
@@ -53,6 +55,7 @@ struct GamePlay {
         void setEnemyDiscardCounter(uint8_t val)        { this->enemyDiscardCounter = val; }
         void setEnemyTavernCounter(uint8_t val)         { this->enemyTavernCounter = val; }
         void setReplenish(uint8_t val)                  { this->replenish = val; }
+        void setSelectorIndex(uint8_t val)              { this->selectorIdx = val; }
 
         void setPreviousEnemy(Card val)                 { this->prevEnemy = val; }
 
@@ -103,6 +106,18 @@ struct GamePlay {
         void decEnemyTavernCounter() {
 
             if (this->enemyTavernCounter > 0) this->enemyTavernCounter--;
+
+        }
+
+        void decSelectorIndex() {
+
+            if (this->selectorIdx > 0) this->selectorIdx--;
+
+        }
+
+        void incSelectorIndex() {
+
+            if (this->selectorIdx < 2) this->selectorIdx++;
 
         }
 

@@ -30,6 +30,7 @@ namespace Images {
     #include "hud/banners/Banner_Discard.h"
     #include "hud/banners/Banner_Tavern.h"
     #include "hud/Player.h"
+    #include "hud/HowToPlay.h"
     
     #include "hud/smallDigits/Number_Small_00.h"
     #include "hud/smallDigits/Number_Small_01.h"

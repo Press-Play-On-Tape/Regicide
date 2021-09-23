@@ -18,21 +18,33 @@ void Game::numberOfPlayers_Init() {
 //
 void Game::numberOfPlayers() { 
 
-    if (PC::buttons.pressed(BTN_RIGHT) && this->gamePlay.getNumberOfPlayers() < 2) { 
+    if (PC::buttons.pressed(BTN_RIGHT)) {
 
-        this->gamePlay.setNumberOfPlayers(this->gamePlay.getNumberOfPlayers() + 1);
+        this->gamePlay.incSelectorIndex();
 
     }         
 
-    if (PC::buttons.pressed(BTN_LEFT) && this->gamePlay.getNumberOfPlayers() > 1) { 
+    if (PC::buttons.pressed(BTN_LEFT)) {
 
-        this->gamePlay.setNumberOfPlayers(this->gamePlay.getNumberOfPlayers() - 1);
+        this->gamePlay.decSelectorIndex();
 
     }         
 
     if (PC::buttons.pressed(BTN_A)) { 
 
-        this->gameState = GameState::Game_Init;
+        switch (this->gamePlay.getSelectorIndex()) {
+
+            case 0:
+                this->gameState = GameState::Instructions_Init;
+                break;
+
+
+            case 1 ... 2:
+                this->gamePlay.setNumberOfPlayers(this->gamePlay.getSelectorIndex());
+                this->gameState = GameState::Game_Init;
+                break;
+
+        }
 
     }         
 
@@ -41,8 +53,6 @@ void Game::numberOfPlayers() {
         this->gameState = GameState::Title;
 
     }    
-
-    //this->gamePlay.getNumberOfPlayers()
   
 
     //  Render the state ..
@@ -51,9 +61,22 @@ void Game::numberOfPlayers() {
     PD::drawBitmap(110, 0, Images::Background, NOROT, FLIPH);
     PD::drawBitmap(41, 1, Images::Title_01_Top);
     PD::drawBitmap(24, 113, Images::Title_01_Bot);
-    PD::drawBitmap(46, 92, Images::Arrow_Left);
-    PD::drawBitmap(56, 86, Images::NumberOfPlayers_Digits[this->gamePlay.getNumberOfPlayers() - 1]);
-    PD::drawBitmap(73, 84, Images::NumberOfPlayers);
-    PD::drawBitmap(166, 92, Images::Arrow_Right);
+    PD::drawBitmap(36, 92, Images::Arrow_Left);
+
+    switch (this->gamePlay.getSelectorIndex()) {
+
+        case 0:
+            PD::drawBitmap(48, 86, Images::HowToPlay);
+            break;
+
+
+        case 1 ... 2:
+            PD::drawBitmap(73, 84, Images::NumberOfPlayers);
+            PD::drawBitmap(56, 86, Images::NumberOfPlayers_Digits[this->gamePlay.getSelectorIndex() - 1]);
+            break;
+
+    }
+
+    PD::drawBitmap(176, 92, Images::Arrow_Right);
 
 }

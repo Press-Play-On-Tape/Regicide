@@ -145,6 +145,11 @@ void Game::game() {
                     case Constants::DealDelay * 10:
 
 
+// this->hands[0].getCard(0).init(2);//SJH 3 
+// this->hands[0].getCard(1).init(15);//SJH 3 
+// this->hands[0].getCard(2).init(28);//SJH 3 
+// this->hands[0].getCard(3).init(41);//SJH 3 
+
 // this->hands[0].getCard(0).init(22);//SJH 10 Spades
 // this->hands[0].getCard(0).init(9);//SJH 10 Clubs
 // this->hands[0].getCard(0).init(32);//SJH Diamond

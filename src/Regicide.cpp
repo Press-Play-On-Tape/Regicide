@@ -25,8 +25,7 @@ void Game::loop() {
 
         case GameState::Title_Init:
             this->title_Init();
-            this->title();
-            break;
+            [[fallthrough]]
 
         case GameState::Title:
             this->title();
@@ -34,8 +33,7 @@ void Game::loop() {
 
         case GameState::Instructions_Init:
             this->instructions_Init();
-            this->instructions();
-            break;
+            [[fallthrough]]
 
         case GameState::Instructions:
             this->instructions();
@@ -43,8 +41,7 @@ void Game::loop() {
 
         case GameState::NoOfPlayers_Init:
             this->numberOfPlayers_Init();
-            this->numberOfPlayers();
-            break;
+            [[fallthrough]]
 
         case GameState::NoOfPlayers:
             this->numberOfPlayers();
@@ -52,8 +49,7 @@ void Game::loop() {
 
         case GameState::Game_Init:
             this->game_Init();
-            this->game();
-            break;
+            [[fallthrough]]
 
         case GameState::Game_NewHand:
         case GameState::Game_Step0_AddCards:
@@ -69,8 +65,7 @@ void Game::loop() {
 
         case GameState::Game_SwapPlayers_Init:
             this->gameSwapPlayers_Init();
-            this->gameSwapPlayers();
-            break;
+            [[fallthrough]]
 
         case GameState::Game_SwapPlayers:
             this->gameSwapPlayers();
@@ -78,8 +73,7 @@ void Game::loop() {
 
         case GameState::Winner_Init:
             this->winner_Init();
-            this->winner();
-            break;
+            [[fallthrough]]
 
         case GameState::Winner:
             this->winner();
