@@ -41,6 +41,11 @@ void Game::game_Init() {
 // }
 // this->gameState = GameState::Game_Step1_Play;
 
+// this->hands[0].removeCard(2);
+// this->hands[0].removeCard(2);
+// this->hands[0].removeCard(2);this->hands[0].removeCard(2);this->hands[0].removeCard(2);
+// this->hands[0].removeCard(2);
+// this->hands[0].removeCard(2);
 }   
 
 
@@ -226,6 +231,13 @@ void Game::game() {
 
         case GameState::Game_Step1_Play:
 
+// if (PC::buttons.pressed(BTN_C)) {
+// Card card;
+// this->deck.dealCard(DeckTypes::Tavern, card);
+// this->deck.addCard(DeckTypes::Discard, card);
+
+// }
+    
             if (PC::buttons.pressed(BTN_LEFT)) {
 
                 if (this->gamePlay.getCardCursor() == 0 && this->gamePlay.getNumberOfPlayers() > 1) {
@@ -415,14 +427,19 @@ void Game::game() {
 
                         if (cardsToReplenish > 0) {
 
+                            uint8_t cardsReplenished = 0;
+
                             for (uint8_t i = 0; i < cardsToReplenish; i++) {
 
-                                Card card;
-                                this->deck.dealCard(DeckTypes::Tavern, card);
-                                currentHand.addCard(card);
+                                if (this->deck.getIndex(DeckTypes::Tavern) >= 0) {
+                                    Card card;
+                                    this->deck.dealCard(DeckTypes::Tavern, card);
+                                    currentHand.addCard(card);
+                                    cardsReplenished++;
+                                }
                             }
 
-                            currentHand.setCardsAdded(cardsToReplenish);
+                            currentHand.setCardsAdded(cardsReplenished);
 
                             this->gamePlay.setReplenish(this->gamePlay.getReplenish() - 1);
                             this->gamePlay.setCounter((Constants::DealDelay * currentHand.getCardsAdded()) + (Constants::DealDelay - 2));

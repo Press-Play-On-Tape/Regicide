@@ -44,10 +44,15 @@ struct Hand {
             this->cardIndex = -1;
             this->maxNumberOfCards = maxNumberOfCards;
             this->playerNumber = playerNumber;
+            this->enemyCardSuit = CardSuit::Clubs;
+            this->shieldValue = 0;
+            this->cardsAdded = 0;
 
             for (uint8_t i = 0; i < HAND_SIZE; i++) {
 
                 this->cards[i].init(Cards::NoCard);
+                this->mark[i] = false;
+                this->suits[i] = false;
 
             }
 

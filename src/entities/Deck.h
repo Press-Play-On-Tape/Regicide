@@ -58,7 +58,7 @@ struct Deck {
 
             // Shuffle tavern deck ..
 
-            tavernDeckCount = 40;
+            this->tavernDeckCount = 40;
             
             for (uint8_t i = 0, j = 0; i < 52; i++) {
 
@@ -71,6 +71,13 @@ struct Deck {
 
             this->castleDeckIndex = 11;
             this->tavernDeckIndex = this->tavernDeckCount -1;
+
+
+            for (uint8_t i = 0; i < 40; i++) {
+                this->discardDeck[i].init(Cards::NoCard);
+            }
+
+            this->discardDeckIndex = -1;
 
             this->shuffleCards(this->tavernDeck, 0, this->tavernDeckCount);
             this->print();

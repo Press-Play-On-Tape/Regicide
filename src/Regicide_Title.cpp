@@ -13,6 +13,7 @@ void Game::title_Init() {
 
     this->gameState = GameState::Title;
     this->playTheme(Themes::Main);
+    this->gamePlay.setCounter(0);
 
 }   
 
