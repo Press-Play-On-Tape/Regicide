@@ -298,9 +298,9 @@ void Game::renderAttackButton(ButtonState state) {
 
 }
 
-void Game::renderYieldButton(ButtonState state) {
+void Game::renderYieldButton(ButtonState state, uint8_t y) {
 
-    PD::drawBitmap(152, 164, Images::Buttons_Yield[static_cast<uint8_t>(state)]);
+    PD::drawBitmap(152, y, Images::Buttons_Yield[static_cast<uint8_t>(state)]);
 
 }
 

@@ -255,8 +255,8 @@ void Game::game() {
                     if (isValidAttack) {
                         this->gamePlay.setCardCursor(Constants::CardCursor_Attack);
                     }
-                    else if (canReplenish) {
-                        this->gamePlay.setCardCursor(Constants::CardCursor_Replenish);
+                    else {
+                        this->gamePlay.setCardCursor(Constants::CardCursor_Yield);
                     }
 
                 }
@@ -302,8 +302,8 @@ void Game::game() {
                     if (isValidAttack) {
                         this->gamePlay.setCardCursor(Constants::CardCursor_Attack);
                     }
-                    else if (canReplenish) {
-                        this->gamePlay.setCardCursor(Constants::CardCursor_Replenish);
+                    else  {
+                        this->gamePlay.setCardCursor(Constants::CardCursor_Yield);
                     }
 
                 }
@@ -329,6 +329,11 @@ void Game::game() {
                     this->gamePlay.setCardCursor(Constants::CardCursor_Attack);
 
                 }
+                else {
+
+                    this->gamePlay.setCardCursor(Constants::CardCursor_Yield);
+
+                }
 
             }
 
@@ -348,7 +353,7 @@ void Game::game() {
 
             }
 
-            if (PC::buttons.pressed(BTN_DOWN) && this->gamePlay.getCardCursor() == Constants::CardCursor_Attack && this->gamePlay.getNumberOfPlayers() == 1) {
+            if (PC::buttons.pressed(BTN_DOWN) && this->gamePlay.getNumberOfPlayers() == 1) {
 // printf("currentHand.getCardIndex() %i\n", (uint16_t)currentHand.getCardIndex());
                 bool canReplenish = currentHand.getCardIndex() < 7 && this->deck.getIndex(DeckTypes::Tavern) >= 0;
 

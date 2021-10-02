@@ -153,11 +153,19 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
 
             }
 
-            this->renderAttackButton(ButtonState::Disabled);
             if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderAttackButton(ButtonState::Disabled);
                 this->renderYieldButton(ButtonState::Disabled);
             }
             else {
+
+                if (currentHand.isValidAttack()) {
+                    this->renderAttackButton(ButtonState::Disabled);
+                }
+                else {
+                    this->renderYieldButton(ButtonState::Disabled, 151);
+                }
+
                 this->renderReplenishButton(ButtonState::Disabled, currentHand);
             }
 
@@ -170,12 +178,20 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
         case GameState::Game_Step1_Play:
 
             this->renderCaption(Caption::AttackOrYield);
-            this->renderAttackButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Attack ? ButtonState::Highlighted : (currentHand.isValidAttack() ? ButtonState::Enabled : ButtonState::Disabled));
 
             if (this->gamePlay.getNumberOfPlayers() > 1) {
+                this->renderAttackButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Attack ? ButtonState::Highlighted : (currentHand.isValidAttack() ? ButtonState::Enabled : ButtonState::Disabled));
                 this->renderYieldButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Yield ? ButtonState::Highlighted : ButtonState::Enabled);
             }
             else {
+    
+                if (currentHand.getMarkedCardCount() > 0) {
+                    this->renderAttackButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Attack ? ButtonState::Highlighted : (currentHand.isValidAttack() ? ButtonState::Enabled : ButtonState::Disabled));
+                }
+                else {
+                    this->renderYieldButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Yield ? ButtonState::Highlighted : ButtonState::Enabled, 151);
+                }
+
                 this->renderReplenishButton(this->gamePlay.getCardCursor() == Constants::CardCursor_Replenish ? ButtonState::Highlighted : ButtonState::Enabled, currentHand);
             }
 

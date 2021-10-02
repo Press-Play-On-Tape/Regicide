@@ -52,7 +52,6 @@ struct Hand {
 
                 this->cards[i].init(Cards::NoCard);
                 this->mark[i] = false;
-                this->suits[i] = false;
 
             }
 

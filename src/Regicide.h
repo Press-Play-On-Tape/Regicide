@@ -67,7 +67,7 @@ class Game {
         void renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards);
         void renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
         void renderAttackButton(ButtonState state);
-        void renderYieldButton(ButtonState state);
+        void renderYieldButton(ButtonState state, uint8_t y = 164);
         void renderReplenishButton(ButtonState state, Hand &currentHand);
         void renderLegend(Hand &currentHand, Card &currentEnemy);
         void renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards);
