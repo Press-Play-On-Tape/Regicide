@@ -247,7 +247,6 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
                         if (this->attacks.getAttack(i).getIndex() > 0) {
 
                             Attack &attack = this->attacks.getAttack(i);
-// printf("attack.getIndex() %i / (Constants::AttackLength / 2) %i = %i \n", attack.getIndex(),(Constants::AttackLength / 2), attack.getIndex() / (Constants::AttackLength / 2));                            
                             PD::drawBitmap(attack.getX(), attack.getY(), Images::Swooshes[(attack.getIndex() / (Constants::AttackLength / 4)) % 4]);
 
                         }
@@ -302,7 +301,6 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
                 PD::setColor(2, 14);
                 PD::setCursor(0, 120);
 
-                //Card currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
                 uint8_t attack = currentEnemy.getAttack() - currentHand.getShieldValue();
 
                 switch (this->gamePlay.getCounter()) {

@@ -53,13 +53,13 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool log
         case 11:    
             PD::setCursor(x + 4, y + 4);
             PD::print("Q");
-            PD::drawBitmap(x + 4, y + 7, Images::Queens[static_cast<uint8_t>(card.getSuit())]);
+            PD::drawBitmap(x + 4, y + 5, Images::Queens[static_cast<uint8_t>(card.getSuit())]);
             break;
 
         case 12:    
             PD::setCursor(x + 4, y + 4);
             PD::print("K");
-            PD::drawBitmap(x + 4, y + 7, Images::Kings[static_cast<uint8_t>(card.getSuit())]);
+            PD::drawBitmap(x + 2, y + 4, Images::Kings[static_cast<uint8_t>(card.getSuit())]);
             break;
 
 
@@ -67,9 +67,7 @@ void Game::renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool log
 
     PD::drawBitmap(x + 3, y + 14, Images::Suits_Coloured[static_cast<uint8_t>(card.getSuit())]);
 
-
 }
-
 
 void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selectedIndex, uint8_t cardsToSuppress) { 
 
@@ -151,7 +149,6 @@ void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t sel
 
 }
 
-
 void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard, bool shakeTopCard) { 
 
     uint8_t endCard = this->deck.getIndex(DeckTypes::Castle);
@@ -171,7 +168,7 @@ void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool di
         
     }
 
-    if (endCard == 0) {
+    if (numberOfCards == 0) {
 
         PD::drawBitmap(x + 2, y, Images::Card_Placeholder);
         x = x + 3;
@@ -204,7 +201,6 @@ void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool di
     this->renderCardCount(x, y, numberOfCards);
 
 }
-
 
 void Game::renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards) { 
 
@@ -294,7 +290,6 @@ void Game::renderCardCount(int16_t x, int16_t y, uint8_t numberOfCards) {
 void Game::renderAttackButton(ButtonState state) {
 
     PD::drawBitmap(152, 151, Images::Buttons_Attack[static_cast<uint8_t>(state)]);
-
 
 }
 

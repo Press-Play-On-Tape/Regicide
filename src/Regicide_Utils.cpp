@@ -1,5 +1,4 @@
 #include "Regicide.h"
-//#include "sounds/Sounds.h"
 
 using PC = Pokitto::Core;
 using PD = Pokitto::Display;
@@ -76,7 +75,7 @@ void Game::playSoundEffect(SoundEffect soundEffect) {
 
 bool Game::changeAttackers(Card& currentEnemy) {
 
-    if (this->deck.getIndex(DeckTypes::Castle) >= 0) {
+    if (this->deck.getIndex(DeckTypes::Castle) > 0) {
 
         this->deck.dealCard(DeckTypes::Castle, currentEnemy);
 
@@ -91,7 +90,7 @@ bool Game::changeAttackers(Card& currentEnemy) {
     }
     else {
 
-        return false;
+        return true;
 
     }
 

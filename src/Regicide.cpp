@@ -1,5 +1,4 @@
 #include "Regicide.h"
-//#include "images/images.h"
 #include "utils/Utils.h"
 
 using PC = Pokitto::Core;

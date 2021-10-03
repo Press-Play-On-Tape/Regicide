@@ -12,7 +12,7 @@ struct Deck {
         Card tavernDeck[42];
         Card discardDeck[42];
 
-        int8_t tavernDeckCount = 40; // 40 two players, 41 three players, 42 four players
+        int8_t tavernDeckCount = 40; 
         int8_t tavernDeckIndex = 40;
         int8_t castleDeckIndex = 11;
         int8_t discardDeckIndex = -1;
@@ -213,7 +213,7 @@ struct Deck {
 
             #ifdef DEBUG
                 
-                printf("Castle Deck: ");
+                printf("\n-------------------------------\nCastle Deck: ");
 
                 for (uint8_t i = 0; i < 12; i++) {
 

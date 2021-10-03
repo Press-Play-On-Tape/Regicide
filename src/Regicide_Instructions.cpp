@@ -6,11 +6,6 @@ using PC = Pokitto::Core;
 using PD = Pokitto::Display;
 
 
-
-
-// ----------------------------------------------------------------------------
-//  Handle state updates .. 
-//
 void Game::instructions_Init() {
 
     this->gameState = GameState::Instructions;
@@ -23,10 +18,6 @@ void Game::instructions_Init() {
 
 }   
 
-
-// ----------------------------------------------------------------------------
-//  Handle state updates .. 
-//
 void Game::instructions() {
 
     // Handle player actions ..

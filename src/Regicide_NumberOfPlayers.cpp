@@ -12,10 +12,6 @@ void Game::numberOfPlayers_Init() {
 
 }
 
-
-// ----------------------------------------------------------------------------
-//  Handle state updates .. 
-//
 void Game::numberOfPlayers() { 
 
     if (PC::buttons.pressed(BTN_RIGHT)) {

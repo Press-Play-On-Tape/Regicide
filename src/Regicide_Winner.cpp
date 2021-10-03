@@ -27,7 +27,7 @@ void Game::winner() {
 
     if (PC::buttons.pressed(BTN_A)) { 
 
-        this->gameState = GameState::Splash_Init;
+        this->gameState = GameState::Title_Init;
 
     }         
 
@@ -53,6 +53,6 @@ void Game::winner() {
 
     }
 
-    PD::drawBitmap(25, 85, Images::Winner);
+    PD::drawBitmap(13, 85, Images::Winner);
 
 }
