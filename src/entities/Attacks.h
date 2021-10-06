@@ -29,7 +29,6 @@ struct Attacks {
 
                     this->attacks[i].setX(30);
                     this->attacks[i].setY(i % 2 == 0 ? 15 : 60);
-// printf("%i\n", (uint16_t)this->attacks[i].getY()                   ); 
                     this->attacks[i].setIndex((Constants::AttackLength * 2) - 1); 
                     break;
 

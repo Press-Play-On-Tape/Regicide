@@ -151,7 +151,7 @@ void Game::renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t sel
 
 void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard, bool shakeTopCard) { 
 
-    uint8_t endCard = this->deck.getIndex(DeckTypes::Castle);
+    int8_t endCard = this->deck.getIndex(DeckTypes::Castle);
     uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
 
     int8_t xOffset = 0;
@@ -204,7 +204,7 @@ void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool di
 
 void Game::renderTavernDeck(int16_t x, int16_t y) { 
 
-    uint8_t endCard = this->deck.getIndex(DeckTypes::Tavern);
+    int8_t endCard = this->deck.getIndex(DeckTypes::Tavern);
     uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
 
     if (endCard < 0) {
