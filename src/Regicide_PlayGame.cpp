@@ -68,6 +68,16 @@ void Game::game_Init() {
 
 // this->hands[0].getCard(0).init(7);//SJH 8 Clubs
 
+
+
+
+deck.print();
+Card card;
+for (uint8_t i = 0; i < 30; i++) {
+this->deck.dealCard(DeckTypes::Tavern, card);
+this->deck.addCard(DeckTypes::Discard, card);
+}
+deck.print();
 }   
 
 void Game::game() {
@@ -199,7 +209,7 @@ void Game::game() {
 
 // this->hands[0].getCard(0).init(7);//SJH 8 Clubs
 // this->hands[0].getCard(1).init(21);//SJH 9 Spades
-// this->hands[0].getCard(1).init(23);//SJH J Spades
+this->hands[0].getCard(1).init(23);//SJH J Spades
 // this->hands[0].removeCard(7);
 // this->hands[0].removeCard(6);
 // this->hands[0].removeCard(5);
@@ -220,7 +230,13 @@ void Game::game() {
 // this->hands[0].setCardIndex(4);
 // Card &currentEnemy = this->deck.getCard(DeckTypes::Castle, this->deck.getIndex(DeckTypes::Castle));
 
+this->hands[0].getCard(0).init(28);//SJH Heart 4
+this->hands[0].getCard(1).init(8);//SJH Heart 4
+this->hands[0].getCard(2).init(29);//SJH Heart 4
+
+
                         this->gameState = GameState::Game_Step1_Play;
+                        this->deck.print();
                         break;
 
                 }

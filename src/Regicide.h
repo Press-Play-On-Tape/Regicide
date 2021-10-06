@@ -64,8 +64,8 @@ class Game {
         void renderCard(int16_t x, int16_t y, Card &card, bool highlight, bool logo);
         void renderPlayerHand(uint8_t playerIdx, int16_t x, int16_t y, uint8_t selecteIndex, uint8_t cardsToSuppress);
         void renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard, bool shakeTopCard);
-        void renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards);
-        void renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard);
+        void renderTavernDeck(int16_t x, int16_t y);
+        void renderDiscardDeck(int16_t x, int16_t y, bool displayTopCard);
         void renderAttackButton(ButtonState state);
         void renderYieldButton(ButtonState state, uint8_t y = 164);
         void renderReplenishButton(ButtonState state, Hand &currentHand);

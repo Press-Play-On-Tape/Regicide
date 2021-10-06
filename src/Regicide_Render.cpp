@@ -22,7 +22,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
     this->renderCastleDeck(13, 11, this->deck.getIndex(DeckTypes::Castle) + 1, this->gamePlay.getEnemyDiscardCounter() == 0 && this->gamePlay.getEnemyTavernCounter() == 0, shake);
 
     PD::drawBitmap(84, 1, Images::Banner_Discard);
-    this->renderDiscardDeck(85, 11, this->deck.getIndex(DeckTypes::Discard) + 1, this->gamePlay.getHeartsCounter() == 0);
+    this->renderDiscardDeck(85, 11, this->gamePlay.getHeartsCounter() == 0);
 
     uint8_t attack = 0;
     
@@ -100,7 +100,7 @@ void Game::renderScreen(Hand &currentHand, Card &currentEnemy) {
     }
 
     PD::drawBitmap(159, 1, Images::Banner_Tavern);
-    this->renderTavernDeck(160, 11, this->deck.getIndex(DeckTypes::Tavern) + 1);
+    this->renderTavernDeck(160, 11);
 
 
 

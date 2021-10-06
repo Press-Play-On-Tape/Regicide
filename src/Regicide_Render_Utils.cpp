@@ -202,12 +202,12 @@ void Game::renderCastleDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool di
 
 }
 
-void Game::renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards) { 
+void Game::renderTavernDeck(int16_t x, int16_t y) { 
 
     uint8_t endCard = this->deck.getIndex(DeckTypes::Tavern);
     uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
 
-    if (endCard == 0) {
+    if (endCard < 0) {
 
         PD::drawBitmap(x + 2, y, Images::Card_Placeholder);
         x = x + 3;
@@ -224,16 +224,16 @@ void Game::renderTavernDeck(int16_t x, int16_t y, uint8_t numberOfCards) {
 
     }
 
-    this->renderCardCount(x, y, numberOfCards);
+    this->renderCardCount(x, y, endCard + 1);
 
 }
 
-void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool displayTopCard) { 
+void Game::renderDiscardDeck(int16_t x, int16_t y, bool displayTopCard) { 
 
     int8_t endCard = this->deck.getIndex(DeckTypes::Discard) + 1;
     uint8_t startCard = endCard > 3 ? endCard - 3 : 0;
 
-    if (endCard == 0) {
+    if (endCard < 0) {
 
         PD::drawBitmap(x + 2, y, Images::Card_Placeholder);
         x = x + 3;
@@ -264,7 +264,7 @@ void Game::renderDiscardDeck(int16_t x, int16_t y, uint8_t numberOfCards, bool d
 
     }
 
-    this->renderCardCount(x, y, numberOfCards);
+    this->renderCardCount(x, y, endCard + 1);
 
 }
 

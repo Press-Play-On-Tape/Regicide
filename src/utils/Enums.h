@@ -1,6 +1,6 @@
 #pragma once
 
-#define _DEBUG
+#define DEBUG
 #define SOUNDS
 #define COOKIE_INITIALISED 42
 
