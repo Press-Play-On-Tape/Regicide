@@ -264,7 +264,7 @@ void Game::renderDiscardDeck(int16_t x, int16_t y, bool displayTopCard) {
 
     }
 
-    this->renderCardCount(x, y, endCard + 1);
+    this->renderCardCount(x, y, endCard);
 
 }
 
